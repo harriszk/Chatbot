@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Driver",
+            "request": "launch",
+            "mainClass": "Driver",
+            "projectName": "chatbot"
+        },
+        {
+            "type": "java",
             "name": "ChatMessageTest",
             "request": "launch",
             "mainClass": "test.java.ChatMessageTest",
