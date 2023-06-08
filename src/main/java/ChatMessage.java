@@ -7,6 +7,19 @@ public class ChatMessage implements Comparable<ChatMessage> {
     private String username;
     private String message;
 
+    // Data should have the format: [<timestamp>] #<channel_name> <username>: <message>
+    public ChatMessage(String data)
+    {
+        String[] dataArray = data.split(" ", 5);
+        String dateString = (dataArray[0] + " " + dataArray[1]).substring(1).split("]")[0];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        this.timestamp = LocalDateTime.parse(dateString, formatter);
+        this.channelName = dataArray[2].substring(1);
+        this.username = dataArray[3].split(":")[0];
+        this.message = dataArray[4];
+    } // end initializing construtor
+
     public ChatMessage(LocalDateTime timestamp, String channelName, String username, String message)
     {
         this.timestamp = timestamp;

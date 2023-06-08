@@ -24,7 +24,7 @@ public class MergeSortTest {
     @Test
     public void testMergeIntegers()
     {
-        MergeSort<List<Integer>> sorter = new MergeSort<>();
+        MergeSort<Integer> sorter = new MergeSort<>();
 
         Integer[] leftArray = {1, 2, 4, 5, 7, 9};
         Integer[] rightArray = {1, 2, 3, 5, 6, 8};
@@ -41,7 +41,7 @@ public class MergeSortTest {
     @Test
     public void testMergeChatMessages()
     {
-        MergeSort<List<ChatMessage>> sorter = new MergeSort<>();
+        MergeSort<ChatMessage> sorter = new MergeSort<>();
 
         ChatMessage leftMessage1 = new ChatMessage(leftMessage1Text);
         ChatMessage leftMessage2 = new ChatMessage(leftMessage2Text);
@@ -68,17 +68,17 @@ public class MergeSortTest {
         right.add(rightMessage3);
         right.add(rightMessage4);
         right.add(rightMessage5);
-
+        
         List<ChatMessage> expected = new ArrayList<>();
         expected.add(leftMessage1);
-        expected.add(leftMessage2);
-        expected.add(leftMessage3);
-        expected.add(leftMessage4);
-        expected.add(leftMessage5);
         expected.add(rightMessage1);
         expected.add(rightMessage2);
+        expected.add(leftMessage2);
         expected.add(rightMessage3);
+        expected.add(leftMessage3);
+        expected.add(leftMessage4);
         expected.add(rightMessage4);
+        expected.add(leftMessage5);
         expected.add(rightMessage5);
 
         List<ChatMessage> actual = sorter.merge(left, right);
@@ -88,7 +88,7 @@ public class MergeSortTest {
     @Test
     public void testMergeSortIntegers()
     {
-        MergeSort<List<Integer>> sorter = new MergeSort<>();
+        MergeSort<Integer> sorter = new MergeSort<>();
 
         Integer[] unorderedArray = {5, 8, 2, 1, 9, 4};
         List<Integer> elementsToSort = new ArrayList<>(Arrays.asList(unorderedArray));
@@ -96,14 +96,14 @@ public class MergeSortTest {
         Integer[] expecetedArray = {1, 2, 4, 5, 8, 9};
         List<Integer> expected = new ArrayList<>(Arrays.asList(expecetedArray));
         
-        elementsToSort = sorter.mergeSort(elementsToSort);
+        elementsToSort = sorter.sort(elementsToSort);
         Assert.assertEquals(expected, elementsToSort);
     } // end testMergeSortIntegers
 
     @Test
     public void testMergeSortChatMessages()
     {
-        MergeSort<List<ChatMessage>> sorter = new MergeSort<>();
+        MergeSort<ChatMessage> sorter = new MergeSort<>();
 
         ChatMessage message1 = new ChatMessage(leftMessage1Text);
         ChatMessage message2 = new ChatMessage(leftMessage2Text);
@@ -125,7 +125,7 @@ public class MergeSortTest {
         expected.add(message4);
         expected.add(message5);
 
-        chatMessagesToSort = sorter.mergeSort(chatMessagesToSort);
+        chatMessagesToSort = sorter.sort(chatMessagesToSort);
         Assert.assertEquals(expected, chatMessagesToSort);
     } // end testMergeSortChatMessages
 } // end MergeSortTest
