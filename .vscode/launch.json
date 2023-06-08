@@ -1,6 +1,13 @@
 {
     "configurations": [
         {
+            "type": "java",
+            "name": "ChatMessageTest",
+            "request": "launch",
+            "mainClass": "test.java.ChatMessageTest",
+            "projectName": "Chatbot_a2979c53"
+        },
+        {
             "name": "C/C++: clang++ build and debug active file",
             "type": "cppdbg",
             "request": "launch",

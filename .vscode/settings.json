@@ -69,5 +69,7 @@
         "utility": "cpp",
         "__functional_03": "cpp"
     },
-    "C_Cpp.default.cppStandard": "c++11"
+    "C_Cpp.default.cppStandard": "c++11",
+    "maven.view": "flat",
+    "java.debug.settings.onBuildFailureProceed": true
 }

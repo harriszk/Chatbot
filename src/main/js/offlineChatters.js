@@ -11,7 +11,7 @@ const opts = {
         password: process.env.OAUTH_TOKEN
     },
     channels: [
-        "mizkif"
+        "syn4ack"
     ]
 };
 
