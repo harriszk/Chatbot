@@ -1,8 +1,8 @@
-import java.time.LocalDate;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,7 +16,7 @@ public class ChatMessageTest {
         this.message = new ChatMessage(this.messageText);
     } // end setUp
 
-    @Test
+    @Test()
     public void testGetTimestamp()
     {
         String dateString = "2023-04-19 22:06:22";
