@@ -9,17 +9,17 @@ import java.util.List;
 public class MergeSortTest {
     private MergeSort sorter;
 
-    public String leftMessage1Text = "[2023-04-19 17:09:34] #channel1 user2: This is the first test message.";
-    public String leftMessage2Text = "[2023-04-19 19:59:51] #channel1 user3: This is the second test message.";
-    public String leftMessage3Text = "[2023-04-19 20:30:40] #channel1 user3: This is the third test message.";
-    public String leftMessage4Text = "[2023-04-19 21:14:26] #channel1 user3: This is the fourth test message.";
-    public String leftMessage5Text = "[2023-04-19 22:06:22] #channel1 user2: This is the fifth test message.";
+    private String leftMessage1Text = "[2023-04-19 17:09:34] #channel1 user2: This is the first test message.";
+    private String leftMessage2Text = "[2023-04-19 19:59:51] #channel1 user3: This is the second test message.";
+    private String leftMessage3Text = "[2023-04-19 20:30:40] #channel1 user3: This is the third test message.";
+    private String leftMessage4Text = "[2023-04-19 21:14:26] #channel1 user3: This is the fourth test message.";
+    private String leftMessage5Text = "[2023-04-19 22:06:22] #channel1 user2: This is the fifth test message.";
 
-    public String rightMessage1Text = "[2023-04-19 18:21:59] #channel1 user2: This is the sixth test message.";
-    public String rightMessage2Text = "[2023-04-19 19:42:13] #channel1 user1: This is the seventh test message.";
-    public String rightMessage3Text = "[2023-04-19 20:05:07] #channel1 user1: This is the eight test message.";
-    public String rightMessage4Text = "[2023-04-19 21:58:57] #channel1 user1: This is the ninth test message.";
-    public String rightMessage5Text = "[2023-04-19 23:15:05] #channel1 user2: This is the tenth test message.";
+    private String rightMessage1Text = "[2023-04-19 18:21:59] #channel1 user2: This is the sixth test message.";
+    private String rightMessage2Text = "[2023-04-19 19:42:13] #channel1 user1: This is the seventh test message.";
+    private String rightMessage3Text = "[2023-04-19 20:05:07] #channel1 user1: This is the eight test message.";
+    private String rightMessage4Text = "[2023-04-19 21:58:57] #channel1 user1: This is the ninth test message.";
+    private String rightMessage5Text = "[2023-04-19 23:15:05] #channel1 user2: This is the tenth test message.";
 
     @Before
     public void setUp()
