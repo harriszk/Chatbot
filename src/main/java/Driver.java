@@ -5,13 +5,13 @@ import java.util.Random;
 
 public class Driver {
     public static void main(String[] args) {
-        Integer[] randomArray = generateRandomArray(1000, 0, 2000);
+        Integer[] randomArray = generateRandomArray(100000, 0, 100000);
         List<Integer> elementsToSort = new ArrayList<>(Arrays.asList(randomArray));
-        System.out.println(elementsToSort);
+        //System.out.println(elementsToSort);
 
-        MergeSort<Integer> sorter = new MergeSort<>();
+        MergeSort sorter = new MergeSort();
         elementsToSort = sorter.sort(elementsToSort);
-        System.out.println(elementsToSort);
+        //System.out.println(elementsToSort);
     } // end main
 
     public static Integer[] generateRandomArray(int size, int minValue, int maxValue) {

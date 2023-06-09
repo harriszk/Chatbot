@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class MergeSort<T extends Comparable<T>> {
+public class MergeSort {
     public MergeSort()
     {
 
     } // end default constructor
 
-    public List<T> sort(List<T> listToSort)
+    public <T extends Comparable<T>> List<T> sort(List<T> listToSort)
     {
         if(listToSort.size() <= 1)
         {
@@ -25,7 +25,7 @@ public class MergeSort<T extends Comparable<T>> {
         return merge(left, right);
     } // end sort
 
-    public List<T> merge(List<T> left, List<T> right)
+    public <T extends Comparable<T>> List<T> merge(List<T> left, List<T> right)
     {
         List<T> result = new ArrayList<>();
         int comparingNumber = 0;
