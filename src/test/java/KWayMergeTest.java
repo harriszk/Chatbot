@@ -18,6 +18,7 @@ import org.junit.Test;
 
 public class KWayMergeTest {
     private KWayMerge merger;
+    private FileHanlder fileHandler = new FileHanlder();
     private static final String CHUNKS_DIRECTORY = "tmp/chunks/testChunks";
 
     private String[] messagesChunk1 = {
@@ -125,11 +126,8 @@ public class KWayMergeTest {
     };
 
     private int[] intChunk1 = {2, 4, 6, 8, 10};
-
     private int[] intChunk2 = {1, 3, 5, 7, 9};
-
     private int[] intChunk3 = {12, 14, 16, 18, 20};
-
     private int[] intChunk4 = {11, 13, 15, 17, 19};
 
     @Before
@@ -139,68 +137,67 @@ public class KWayMergeTest {
 
     @Test
     public void testMergeTwoSortedChunks() {
-        int[][] chunks = {intChunk1, intChunk2};
-        writeChunksToFiles(chunks);
+        this.fileHandler.writeChunkToFile(CHUNKS_DIRECTORY + "/chunk1.txt", intChunk1);
+        this.fileHandler.writeChunkToFile(CHUNKS_DIRECTORY + "/chunk2.txt", intChunk2);
 
         List<Integer> expected = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
 
-        List<String> chunkLocations = new ArrayList<>(Arrays.asList("tmp/chunks/chunk1.txt", "tmp/chunks/chunk2.txt"));
+        List<String> chunkLocations = new ArrayList<>(Arrays.asList(CHUNKS_DIRECTORY + "/chunk1.txt", CHUNKS_DIRECTORY + "/chunk2.txt"));
 
-        this.merger.merge(chunkLocations);
-        List<Integer> mergedChunk = loadChunkFromFile("chunk1-2_merged.txt");
+        this.merger.mergeAllChunks(chunkLocations);
+        List<Integer> mergedChunk = this.fileHandler.loadChunkFromFile(CHUNKS_DIRECTORY + "/chunk1-2_merged.txt");
 
         Assert.assertEquals(expected, mergedChunk);
         Assert.assertEquals(expected.size(), mergedChunk.size());
         Assert.assertEquals(expected.get(0), mergedChunk.get(0));
         Assert.assertEquals(expected.get(9), mergedChunk.get(9));
 
-        deleteChunkFile("chunk1.txt");
-        deleteChunkFile("chunk2.txt");
-        deleteChunkFile("chunk1-2_merged.txt");
+        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1.txt");
+        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk2.txt");
+        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1-2_merged.txt");
     } // end testMergeSortedChunks
 
     @Test
     public void testMergeTwoSortedChunks_OneEmptyChunk() {
         int[] emptyChunk = {};
-        int[][] chunks = {intChunk3, emptyChunk};
-        writeChunksToFiles(chunks);
+        this.fileHandler.writeChunkToFile(CHUNKS_DIRECTORY + "/chunk1.txt", intChunk1);
+        this.fileHandler.writeChunkToFile(CHUNKS_DIRECTORY + "/chunk2.txt", emptyChunk);
 
         List<Integer> expected = new ArrayList<>(Arrays.asList(12, 14, 16, 18, 20));
 
-        List<String> chunkLocations = new ArrayList<>(Arrays.asList("tmp/chunks/chunk1.txt", "tmp/chunks/chunk2.txt"));
+        List<String> chunkLocations = new ArrayList<>(Arrays.asList(CHUNKS_DIRECTORY + "/chunk1.txt", CHUNKS_DIRECTORY + "/chunk2.txt"));
 
-        this.merger.merge(chunkLocations);
-        List<Integer> mergedChunk = loadChunkFromFile("chunk1-2_merged.txt");
+        this.merger.mergeAllChunks(chunkLocations);
+        List<Integer> mergedChunk = this.fileHandler.loadChunkFromFile(CHUNKS_DIRECTORY + "/chunk1-2_merged.txt");
 
         Assert.assertEquals(expected, mergedChunk);
         Assert.assertEquals(expected.size(), mergedChunk.size());
         Assert.assertEquals(expected.get(0), mergedChunk.get(0));
         Assert.assertEquals(expected.get(4), mergedChunk.get(4));
 
-        deleteChunkFile("chunk1.txt");
-        deleteChunkFile("chunk2.txt");
-        deleteChunkFile("chunk1-2_merged.txt");
+        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1.txt");
+        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk2.txt");
+        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1-2_merged.txt");
     } // end testMergeSortedChunksWithEmptyChunks
 
     @Test
     public void testMergeSortedChunks_SingleChunk() {
-        int[][] chunks = {intChunk4};
-        writeChunksToFiles(chunks);
+        this.fileHandler.writeChunkToFile(CHUNKS_DIRECTORY + "/chunk1.txt", intChunk4);
 
         List<Integer> expected = new ArrayList<>(Arrays.asList(11, 13, 15, 17, 19));
 
-        List<String> chunkLocations = new ArrayList<>(Arrays.asList("tmp/chunks/chunk1.txt"));
+        List<String> chunkLocations = new ArrayList<>(Arrays.asList(CHUNKS_DIRECTORY + "/chunk1.txt"));
 
-        this.merger.merge(chunkLocations);
-        List<Integer> mergedChunk = loadChunkFromFile("chunk1_merged.txt");
+        this.merger.mergeAllChunks(chunkLocations);
+        List<Integer> mergedChunk = this.fileHandler.loadChunkFromFile(CHUNKS_DIRECTORY + "/chunk1_merged.txt");
 
         Assert.assertEquals(expected, mergedChunk);
         Assert.assertEquals(expected.size(), mergedChunk.size());
         Assert.assertEquals(expected.get(0), mergedChunk.get(0));
         Assert.assertEquals(expected.get(4), mergedChunk.get(4));
 
-        deleteChunkFile("chunk1.txt");
-        deleteChunkFile("chunk1_merged.txt");
+        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1.txt");
+        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1_merged.txt");
     } // end testMergeSortedChunksWithSingleChunk
 
     @Test
@@ -208,84 +205,4 @@ public class KWayMergeTest {
         // The chunks should have a lot of entires that cannot directly be loaded into memory.
         Assert.fail("TODO: Implement test for merging sorted chunks with large chunks");
     } // end testMergeSortedChunksWithLargeChunks
-
-    // -------------------- HELPER METHODS --------------------
-    private List<Integer> loadChunkFromFile(String filePath) {
-        List<Integer> chunk = new ArrayList<>();
-        String line;
-        int number;
-
-        File file = new File(filePath);
-        if(!file.exists()) 
-        {
-            return null;
-        } // end if
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            while((line = reader.readLine()) != null) 
-            {
-                number = Integer.parseInt(line);
-                chunk.add(number);
-            } // end while
-
-            reader.close();
-        } catch(IOException e) {
-            e.printStackTrace();
-        } // end try/catch
-
-        return chunk;
-    } // end loadChunkFromFile
-
-    private void writeChunksToFiles(int[][] chunks)
-    {
-        File chunksDir = new File(CHUNKS_DIRECTORY);
-        if(!chunksDir.exists()) 
-        {
-            chunksDir.mkdirs();
-        } // end if
-
-        for(int i = 0; i < chunks.length; i++) 
-        {
-            String chunkFileName = "chunk" + (i + 1) + ".txt";
-            String chunkFilePath = CHUNKS_DIRECTORY + "/" + chunkFileName;
-
-            File chunkFile = new File(chunkFilePath);
-            if(chunkFile.exists()) 
-            {
-                chunkFile.delete();
-            } // end if
-
-            try {
-                FileWriter writer = new FileWriter(chunkFile);
-
-                for(int j = 0; j < chunks[i].length; j++) 
-                {
-                    writer.write(Integer.toString(chunks[i][j]) + "\n");
-                } // end for
-
-                writer.close();
-                System.out.println("Chunk file created: " + chunkFilePath);
-            } catch(IOException e) {
-                e.printStackTrace();
-            } // end try/catch
-        } // end for
-    } // end writeChunksToFiles
-
-    private void deleteChunkFile(String chunkFileName) {
-        File chunkFile = new File(chunkFileName);
-
-        if(!chunkFile.exists()) 
-        {
-            System.out.println("Chunk file does not exist: " + chunkFileName);
-            return;
-        } // end if
-
-        if(chunkFile.delete()) {
-            System.out.println("Deleted chunk file: " + chunkFileName);
-        } else {
-            System.out.println("Failed to delete chunk file: " + chunkFileName);
-        } // end if
-    } // end deleteChunkFile
 } // end KWayMergeTest
