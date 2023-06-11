@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -6,13 +7,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChunkProcessor {
-    //private String chunkFilePath;
+    private String chunkFilePath;
     private RandomAccessFile randomAccessFile;
     private long previousPosition;
 
     public ChunkProcessor(String chunkFilePath)
     {
-        //this.chunkFilePath = chunkFilePath;
+        this.chunkFilePath = chunkFilePath;
         try {
             this.randomAccessFile = new RandomAccessFile(chunkFilePath, "r");
         } catch (FileNotFoundException e) {
@@ -57,6 +58,20 @@ public class ChunkProcessor {
 
         return elements;
     } // end loadNElements
+
+    public void deleteChunk()
+    {
+        this.close();
+
+        File fileToDelete = new File(this.chunkFilePath);
+        boolean isDeleted = fileToDelete.delete();
+        
+        if (isDeleted) {
+            System.out.println("File deleted successfully. " + fileToDelete.getAbsolutePath());
+        } else {
+            System.out.println("Failed to delete the file." + fileToDelete.getAbsolutePath());
+        }
+    } // end deleteChunk
 
     public void close() 
     {
