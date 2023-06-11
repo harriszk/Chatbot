@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ChunkProcessor {
     //private String chunkFilePath;
@@ -32,8 +33,15 @@ public class ChunkProcessor {
                 this.previousPosition = this.randomAccessFile.getFilePointer();
 
                 line = this.randomAccessFile.readLine();
-                if(line == null || count == N)
+
+                if(count == N)
                 {
+                    break;
+                } // end if
+
+                if(line == null)
+                {
+                    elements.add(null);
                     break;
                 } // end if
                 
@@ -46,8 +54,6 @@ public class ChunkProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         } // end try/catch
-
-        System.out.println(elements);
 
         return elements;
     } // end loadNElements
@@ -63,4 +69,20 @@ public class ChunkProcessor {
             e.printStackTrace();
         } // end try/catch
     } // end close
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) 
+        {
+            return true;
+        } // end if 
+
+        if(obj == null || getClass() != obj.getClass()) 
+        {
+            return false;
+        } // end if
+
+        ChunkProcessor other = (ChunkProcessor) obj;
+        return Objects.equals(randomAccessFile, other.randomAccessFile);
+    } // end equals
 } // end ChunkProcessor

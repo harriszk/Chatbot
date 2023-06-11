@@ -1,3 +1,6 @@
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,4 +50,13 @@ public class ChunkProcessorTest {
         this.processor.close();
         this.fileHanlder.deleteChunkFile(TEST_CHUNK_LOCATION);
     } // end testLoadNextElements
+
+    @Test
+    public void testLoadMoreElementsThanAvailable() {
+        List<Integer> elements = this.processor.loadNElements(16);
+
+        // Assert that the returned elements list has fewer elements than N
+        //assertEquals(16, elements.size());
+        assertNull(elements.get(elements.size() - 1));
+    }
 } // end ChunkProcessorTest
