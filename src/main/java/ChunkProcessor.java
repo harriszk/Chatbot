@@ -63,7 +63,7 @@ public class ChunkProcessor {
         return elements;
     } // end loadNElements
 
-    public void deleteChunk()
+    public void deleteChunkFromFile()
     {
         this.close();
 

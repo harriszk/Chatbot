@@ -172,7 +172,7 @@ public class KWayMergeTest {
         Assert.assertEquals(expected.size(), mergedChunk.size());
         Assert.assertEquals(expected.get(0), mergedChunk.get(0));
         Assert.assertEquals(expected.get(4), mergedChunk.get(4));
-        
+
         this.fileHandler.deleteChunkFile(CHUNKS_DIRECTORY + "/finalMergedChunks.txt");
     } // end testMergeSortedChunksWithEmptyChunks
 
@@ -198,6 +198,11 @@ public class KWayMergeTest {
     @Test
     public void testMergeSortedChunks_LargeChunks() {
         // The chunks should have a lot of entires that cannot directly be loaded into memory.
+
+        List<String> chunkLocations = new ArrayList<>(Arrays.asList("CHUNK_0.txt", "CHUNK_1.txt", "CHUNK_2.txt", "CHUNK_3.txt", "CHUNK_4.txt"));
+
+        this.merger.mergeAllChunks(chunkLocations);
+
         Assert.fail("TODO: Implement test for merging sorted chunks with large chunks");
     } // end testMergeSortedChunksWithLargeChunks
 } // end KWayMergeTest

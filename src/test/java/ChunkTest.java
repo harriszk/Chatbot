@@ -1,51 +1,110 @@
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ChunkTest {
     private static final int MAX_SIZE = 3;
+    private ChunkProcessor processor;
+    private Queue<Integer> queue;
     private Chunk chunk;
 
-    @Test
-    public void testGetChunkQueue()
+    @Before
+    public void setup() 
     {
-        ChunkProcessor processor = new ChunkProcessor("testLoadingChunksFile.txt");
+        this.processor = new ChunkProcessor("testLoadingChunksFile.txt");
+        this.queue = new PriorityQueue<>(MAX_SIZE);
+        this.queue.addAll(this.processor.loadNElements(MAX_SIZE));
 
-        List<Integer> loadedChunk = processor.loadNElements(MAX_SIZE);
+        this.chunk = new Chunk(this.queue, this.processor);
+    } // end setUp
 
-        Queue<Integer> chunkQueue = new PriorityQueue<>(MAX_SIZE);
-        for(Integer element : loadedChunk)
+    @Test
+    public void testIsEmpty() 
+    {
+        Assert.assertFalse(this.chunk.isEmpty());
+        
+        for(int i = 0; i < 16; i++)
         {
-            chunkQueue.add(element);
+            this.chunk.removeNextElement();
+        } // end for
+        
+        Assert.assertTrue(this.chunk.isEmpty());
+    } // end testIsEmpty
+
+    @Test
+    public void testGetNextElement() 
+    {
+        Integer expected = 1;
+        Integer actual = this.chunk.getNextElement();
+        Assert.assertEquals(expected, actual);
+
+        this.chunk.removeNextElement();
+        expected = 2;
+        actual = this.chunk.getNextElement();
+        Assert.assertEquals(expected, actual);
+    } // end testGetNextElement
+
+    @Test
+    public void testRemoveNextElement() 
+    {
+        Integer expected = 1;
+        Integer actual = this.chunk.removeNextElement();
+        Assert.assertEquals(expected, actual);
+
+        expected = 2;
+        actual = this.chunk.removeNextElement();
+        Assert.assertEquals(expected, actual);
+
+        expected = 3;
+        actual = this.chunk.removeNextElement();
+        Assert.assertEquals(expected, actual);
+    } // end testRemoveNextElement
+
+    @Test
+    public void testLoadNewElementsIfNeeded() 
+    {
+        for(int i = 0; i < MAX_SIZE; i++)
+        {
+            this.chunk.removeNextElement();
         } // end for
 
-        this.chunk = new Chunk(chunkQueue, processor);
+        this.chunk.loadNewElementsIfNeeded(MAX_SIZE);
 
-        Queue<Integer> expected = new PriorityQueue<>(MAX_SIZE);
-        expected.add(1);
-        expected.add(2);
-        expected.add(3);
+        Integer expected = MAX_SIZE + 1;
+        Integer actual = this.chunk.removeNextElement();
+        Assert.assertEquals(expected, actual);
 
-        List<Integer> expectedList = new ArrayList<>(expected);
-        List<Integer> actualList = new ArrayList<>(this.chunk.getQueue());
-
-        // Compare the lists
-        Assert.assertEquals(expectedList, actualList);
-    } // end testGetChunkQueue
+        expected++;
+        actual = this.chunk.removeNextElement();
+        Assert.assertEquals(expected, actual);
+    } // end testRemoveNextElement
 
     @Test
-    public void testGetChunkProcessor()
+    public void testDelete() 
     {
-        ChunkProcessor expected = new ChunkProcessor("testLoadingChunksFile.txt");
+        int[] testChunk = {2, 7, 9, 12, 15, 19, 23, 26, 27, 28, 30, 31, 36, 38};
+        FileHanlder fileHanlder = new FileHanlder();
+        fileHanlder.writeChunkToFile("tmp/chunks/testChunks/test.txt", testChunk);
 
-        this.chunk = new Chunk(null, expected);
+        this.processor = new ChunkProcessor("tmp/chunks/testChunks/test.txt");
+        this.queue = new PriorityQueue<>(MAX_SIZE);
+        this.queue.addAll(this.processor.loadNElements(MAX_SIZE));
 
-        ChunkProcessor actual = this.chunk.getProcessor();
+        this.chunk = new Chunk(this.queue, this.processor);
 
-        Assert.assertEquals(actual, expected);
-    } // end testGetChunkProcessor
+        this.chunk.delete();
+
+        File chunkFile = new File("tmp/chunks/testChunks/test.txt");
+        Assert.assertFalse(chunkFile.exists());
+    } // end testDelete
 } // end ChunkTest

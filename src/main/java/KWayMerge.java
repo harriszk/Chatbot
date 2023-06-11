@@ -8,7 +8,7 @@ import java.util.Queue;
 
 public class KWayMerge {
     private static final String CHUNKS_DIRECTORY = "tmp/chunks/testChunks/";
-    private static final int MAX_SIZE = 3;
+    private static final int MAX_SIZE = 10;
     private static final int BUFFER_SIZE = 1000;
     private Queue<Chunk> chunksToMerge;
 
@@ -34,7 +34,7 @@ public class KWayMerge {
             loadedChunk = chunkProcessor.loadNElements(KWayMerge.MAX_SIZE);
             if(loadedChunk == null)
             {
-                chunkProcessor.deleteChunk();
+                chunkProcessor.deleteChunkFromFile();
                 break;
             } // end if
 
@@ -42,6 +42,8 @@ public class KWayMerge {
 
             chunkQueue = new PriorityQueue<>(loadedChunk);
             
+            System.out.println(chunkQueue);
+
             left = new Chunk(chunkQueue, chunkProcessor);
             this.chunksToMerge.add(left);
         } // end for
@@ -50,13 +52,15 @@ public class KWayMerge {
         // although it does go through the formality of doing the merge.
         if(this.chunksToMerge.size() == 1)
         {
+            // TODO: Change this to just rename the chunk's file name to "finalMergedChunks.txt".
+
             left = this.chunksToMerge.poll();
             chunkQueue = new PriorityQueue<>();
             right = new Chunk(chunkQueue, null);
 
             String mergedChunkLocation = KWayMerge.CHUNKS_DIRECTORY + "finalMergedChunks.txt";
             merge(left, right, mergedChunkLocation);
-            left.getProcessor().deleteChunk();
+            left.delete();
         } // end if
 
         // Merge chunks until only one chunk remains
@@ -79,95 +83,55 @@ public class KWayMerge {
             mergedChunk = new Chunk(chunkQueue, chunkProcessor);
             this.chunksToMerge.add(mergedChunk);
 
-            left.getProcessor().deleteChunk();
-            right.getProcessor().deleteChunk();
+            left.delete();
+            right.delete();
         } // end while
     } // end mergeAllChunks
 
     private void merge(Chunk left, Chunk right, String outputFile) 
     {
-        int leftCounter = 0;
-        int rightCounter = 0;
-        List<Integer> newElements;
-
         try {
             FileWriter fileWriter = new FileWriter(outputFile, true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter, KWayMerge.BUFFER_SIZE);
 
             StringBuilder mergedData = new StringBuilder();
 
-            while(!left.getQueue().isEmpty() && !right.getQueue().isEmpty())
+            while(!left.isEmpty() && !right.isEmpty())
             {
-                if(left.getQueue().peek() <= right.getQueue().peek()) {
-                    mergedData.append(left.getQueue().poll());
+                if(left.getNextElement() <= right.getNextElement()) {
+                    mergedData.append(left.removeNextElement());
                     mergedData.append(System.lineSeparator());
 
-                    leftCounter++;
-                    if(leftCounter == KWayMerge.MAX_SIZE)
-                    {
-                        newElements = left.getProcessor().loadNElements(KWayMerge.MAX_SIZE);
-                        left.getQueue().addAll(newElements);
-                        leftCounter = 0;
-                    } // end if
+                    left.loadNewElementsIfNeeded(KWayMerge.MAX_SIZE);
                 } else {
-                    mergedData.append(right.getQueue().poll().toString());
+                    mergedData.append(right.removeNextElement());
                     mergedData.append(System.lineSeparator());
 
-                    rightCounter++;
-                    if(rightCounter == KWayMerge.MAX_SIZE)
-                    {
-                        newElements = right.getProcessor().loadNElements(KWayMerge.MAX_SIZE);
-                        right.getQueue().addAll(newElements);
-                        rightCounter = 0;
-                    } // end if
+                    right.loadNewElementsIfNeeded(KWayMerge.MAX_SIZE);
                 } // end if
 
-                if(mergedData.length() >= KWayMerge.BUFFER_SIZE) 
-                {
-                    bufferedWriter.write(mergedData.toString());
-                    mergedData.setLength(0); // Clear the buffer
-                } // end if
+                this.tryWritingToBuffer(mergedData, bufferedWriter);
             } // end while
 
             // Write the remaining elements from either the left or the right chunk.
-            while(!left.getQueue().isEmpty()) 
+            while(!left.isEmpty()) 
             {
-                mergedData.append(left.getQueue().poll());
+                mergedData.append(left.removeNextElement());
                 mergedData.append(System.lineSeparator());
 
-                leftCounter++;
-                if(leftCounter == KWayMerge.MAX_SIZE)
-                {
-                    newElements = left.getProcessor().loadNElements(KWayMerge.MAX_SIZE);
-                    left.getQueue().addAll(newElements);
-                    leftCounter = 0;
-                } // end if
+                left.loadNewElementsIfNeeded(KWayMerge.MAX_SIZE);
 
-                if(mergedData.length() >= KWayMerge.BUFFER_SIZE) 
-                {
-                    bufferedWriter.write(mergedData.toString());
-                    mergedData.setLength(0); // Clear the buffer
-                } // end if
+                this.tryWritingToBuffer(mergedData, bufferedWriter);
             } // end while
 
-            while(!right.getQueue().isEmpty()) 
+            while(!right.isEmpty()) 
             {
-                mergedData.append(right.getQueue().poll().toString());
+                mergedData.append(right.removeNextElement());
                 mergedData.append(System.lineSeparator());
 
-                rightCounter++;
-                if(rightCounter == KWayMerge.MAX_SIZE)
-                {
-                    newElements = right.getProcessor().loadNElements(KWayMerge.MAX_SIZE);
-                    right.getQueue().addAll(newElements);
-                    rightCounter = 0;
-                } // end if 
+                right.loadNewElementsIfNeeded(KWayMerge.MAX_SIZE);
 
-                if(mergedData.length() >= KWayMerge.BUFFER_SIZE) 
-                {
-                    bufferedWriter.write(mergedData.toString());
-                    mergedData.setLength(0); // Clear the buffer
-                } // end if
+                this.tryWritingToBuffer(mergedData, bufferedWriter);
             } // end while
 
             bufferedWriter.write(mergedData.toString());
@@ -177,4 +141,13 @@ public class KWayMerge {
             e.printStackTrace();
         } // end try/catch
     } // end merge
+
+    private void tryWritingToBuffer(StringBuilder buffer, BufferedWriter bufferedWriter) throws IOException 
+    {
+        if(buffer.length() >= KWayMerge.BUFFER_SIZE) 
+        {
+            bufferedWriter.write(buffer.toString());
+            buffer.setLength(0); // Clear the buffer
+        } // end if
+    } // end writeToBuffer
 } // end KWayMerge
