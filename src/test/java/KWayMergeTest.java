@@ -152,9 +152,7 @@ public class KWayMergeTest {
         Assert.assertEquals(expected.get(0), mergedChunk.get(0));
         Assert.assertEquals(expected.get(9), mergedChunk.get(9));
 
-        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1.txt");
-        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk2.txt");
-        //this.fileHandler.deleteChunkFile(CHUNKS_DIRECTORY + "/finalMergedChunks.txt");
+        this.fileHandler.deleteChunkFile(CHUNKS_DIRECTORY + "/finalMergedChunks.txt");
     } // end testMergeSortedChunks
 
     @Test
@@ -174,9 +172,7 @@ public class KWayMergeTest {
         Assert.assertEquals(expected.size(), mergedChunk.size());
         Assert.assertEquals(expected.get(0), mergedChunk.get(0));
         Assert.assertEquals(expected.get(4), mergedChunk.get(4));
-
-        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1.txt");
-        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk2.txt");
+        
         this.fileHandler.deleteChunkFile(CHUNKS_DIRECTORY + "/finalMergedChunks.txt");
     } // end testMergeSortedChunksWithEmptyChunks
 
@@ -196,8 +192,7 @@ public class KWayMergeTest {
         Assert.assertEquals(expected.get(0), mergedChunk.get(0));
         Assert.assertEquals(expected.get(4), mergedChunk.get(4));
 
-        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1.txt");
-        //this.merger.deleteChunkFile(CHUNKS_DIRECTORY, "chunk1_merged.txt");
+        this.fileHandler.deleteChunkFile(CHUNKS_DIRECTORY + "/finalMergedChunks.txt");
     } // end testMergeSortedChunksWithSingleChunk
 
     @Test

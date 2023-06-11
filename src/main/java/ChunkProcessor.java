@@ -42,7 +42,6 @@ public class ChunkProcessor {
 
                 if(line == null)
                 {
-                    elements.add(null);
                     break;
                 } // end if
                 
@@ -55,6 +54,11 @@ public class ChunkProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         } // end try/catch
+
+        if(elements.size() == 0)
+        {
+            return null;
+        } // end if
 
         return elements;
     } // end loadNElements

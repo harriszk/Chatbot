@@ -56,7 +56,6 @@ public class ChunkProcessorTest {
         List<Integer> elements = this.processor.loadNElements(16);
 
         // Assert that the returned elements list has fewer elements than N
-        //assertEquals(16, elements.size());
-        assertNull(elements.get(elements.size() - 1));
+        Assert.assertNotEquals(16, elements.size());
     }
 } // end ChunkProcessorTest
