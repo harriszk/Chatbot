@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ChunkProcessor {
+public class ChunkProcessor<T> {
     private String chunkFilePath;
     private RandomAccessFile randomAccessFile;
     private long previousPosition;
@@ -21,12 +21,12 @@ public class ChunkProcessor {
         } // end try/catch
     } // end initializing constructor
 
-    public List<Integer> loadNElements(int N) {
-        List<Integer> elements = new ArrayList<>();
+    public List<T> loadNElements(int N, ElementConverter<T> converter) {
+        List<T> elements = new ArrayList<>();
 
         try {
             String line;
-            int element;
+            T element;
             int count = 0;
 
             while(true) 
@@ -34,18 +34,17 @@ public class ChunkProcessor {
                 this.previousPosition = this.randomAccessFile.getFilePointer();
 
                 line = this.randomAccessFile.readLine();
+                if(line == null)
+                {
+                    break;
+                } // end if
 
                 if(count == N)
                 {
                     break;
                 } // end if
-
-                if(line == null)
-                {
-                    break;
-                } // end if
                 
-                element = Integer.parseInt(line);
+                element = converter.convert(line);
                 elements.add(element);
                 count++;
             } // end while

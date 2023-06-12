@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class FileHandlerTest {
     private static final String TEST_DIRECTORY = "tmp/chunks/testChunks";
-    private FileHanlder fileHandler;
+    private FileHandler fileHandler;
 
     private int[] intChunk1 = {2, 4, 6, 8, 10};
     private int[] intChunk2 = {1, 3, 5, 7, 9};
@@ -16,7 +16,7 @@ public class FileHandlerTest {
     @Before
     public void setUp()
     {
-        this.fileHandler = new FileHanlder();
+        this.fileHandler = new FileHandler();
     } // end setUp
 
     @Test

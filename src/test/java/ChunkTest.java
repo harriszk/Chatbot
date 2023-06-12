@@ -1,10 +1,4 @@
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -14,18 +8,19 @@ import org.junit.Test;
 
 public class ChunkTest {
     private static final int MAX_SIZE = 3;
-    private ChunkProcessor processor;
+    private ChunkProcessor<Integer> processor;
     private Queue<Integer> queue;
-    private Chunk chunk;
+    private IntegerConverter converter = new IntegerConverter();
+    private Chunk<Integer> chunk;
 
     @Before
     public void setup() 
     {
-        this.processor = new ChunkProcessor("testLoadingChunksFile.txt");
+        this.processor = new ChunkProcessor<>("testLoadingChunksFile.txt");
         this.queue = new PriorityQueue<>(MAX_SIZE);
-        this.queue.addAll(this.processor.loadNElements(MAX_SIZE));
+        this.queue.addAll(this.processor.loadNElements(MAX_SIZE, this.converter));
 
-        this.chunk = new Chunk(this.queue, this.processor);
+        this.chunk = new Chunk<>(this.queue, this.processor, this.converter);
     } // end setUp
 
     @Test
@@ -93,14 +88,14 @@ public class ChunkTest {
     public void testDelete() 
     {
         int[] testChunk = {2, 7, 9, 12, 15, 19, 23, 26, 27, 28, 30, 31, 36, 38};
-        FileHanlder fileHanlder = new FileHanlder();
-        fileHanlder.writeChunkToFile("tmp/chunks/testChunks/test.txt", testChunk);
+        FileHandler fileHandler = new FileHandler();
+        fileHandler.writeChunkToFile("tmp/chunks/testChunks/test.txt", testChunk);
 
-        this.processor = new ChunkProcessor("tmp/chunks/testChunks/test.txt");
+        this.processor = new ChunkProcessor<>("tmp/chunks/testChunks/test.txt");
         this.queue = new PriorityQueue<>(MAX_SIZE);
-        this.queue.addAll(this.processor.loadNElements(MAX_SIZE));
+        this.queue.addAll(this.processor.loadNElements(MAX_SIZE, this.converter));
 
-        this.chunk = new Chunk(this.queue, this.processor);
+        this.chunk = new Chunk<>(this.queue, this.processor, this.converter);
 
         this.chunk.delete();
 

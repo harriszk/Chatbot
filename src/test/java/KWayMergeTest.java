@@ -1,13 +1,3 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class KWayMergeTest {
-    private KWayMerge merger;
-    private FileHanlder fileHandler = new FileHanlder();
     private static final String CHUNKS_DIRECTORY = "tmp/chunks/testChunks";
+    private KWayMerge<Integer> merger;
+    private FileHandler fileHandler = new FileHandler();
+    private IntegerConverter converter = new IntegerConverter();
 
     private String[] messagesChunk1 = {
         "[2023-06-06 09:15:00] #channel1 user1: Hello, everyone!",
@@ -132,7 +123,7 @@ public class KWayMergeTest {
 
     @Before
     public void setUp() {
-        this.merger = new KWayMerge();
+        this.merger = new KWayMerge<>(this.converter);
     } // end setUp
 
     @Test
@@ -199,7 +190,7 @@ public class KWayMergeTest {
     public void testMergeSortedChunks_LargeChunks() {
         // The chunks should have a lot of entires that cannot directly be loaded into memory.
 
-        List<String> chunkLocations = new ArrayList<>(Arrays.asList("CHUNK_0.txt", "CHUNK_1.txt", "CHUNK_2.txt", "CHUNK_3.txt", "CHUNK_4.txt"));
+        List<String> chunkLocations = new ArrayList<>(Arrays.asList(CHUNKS_DIRECTORY + "/CHUNK_0.txt", CHUNKS_DIRECTORY + "/CHUNK_1.txt", CHUNKS_DIRECTORY + "/CHUNK_2.txt", CHUNKS_DIRECTORY + "/CHUNK_3.txt", CHUNKS_DIRECTORY + "/CHUNK_4.txt"));
 
         this.merger.mergeAllChunks(chunkLocations);
 

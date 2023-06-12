@@ -23,29 +23,44 @@ public class Driver {
         //System.out.println(elementsToSort);
         */
 
-        int numChunks = 5;
-        int chunkSize = 500;
-
-        List<String> chunkFiles = new ArrayList<>();
-        Random random = new Random();
-
-        for (int i = 0; i < numChunks; i++) {
-            String fileName = "Chunk_" + i + ".txt";
-            chunkFiles.add(fileName);
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-                int overlap = chunkSize / 5; // 10% overlap between chunks
-
-                // Generate the chunk data
-                int start = i * chunkSize - overlap;
-                int end = (i + 1) * chunkSize + overlap;
-                for (int j = start; j < end; j++) {
-                    writer.write(String.valueOf(j + random.nextInt(10))); // Add random variation to each integer
-                    writer.newLine();
-                }
-            }
-        }
+        Integer[] test = generate(50, 1, 1000);
+        List<Integer> elementsToSort = new ArrayList<>(Arrays.asList(test));
+        System.out.println(elementsToSort);
     } // end main
+
+    public static Integer[] generate(int select, int minVal, int maxVal) {
+        if (select <= 0) {
+            System.out.println("The number of random numbers desired must be a positive integer.");
+            return new Integer[0];
+        }
+        if (minVal <= 0) {
+            System.out.println("The minimum value of the range must be a positive integer.");
+            return new Integer[0];
+        }
+        if (maxVal <= 0) {
+            System.out.println("The maximum value of the range must be a positive integer.");
+            return new Integer[0];
+        }
+
+        int remaining = maxVal - minVal + 1;
+
+        if (remaining <= select) {
+            System.out.println("The number of values to select must be less than the size of the range from which to select them.");
+            return new Integer[0];
+        }
+
+        Integer[] result = new Integer[select];
+        int index = 0;
+        for (int i = minVal; i <= maxVal; i++) {
+            if (Math.random() < (select / (double) remaining)) {
+                result[index++] = i;
+                select--;
+            }
+            remaining--;
+        }
+
+        return result;
+    }
 
     public static Integer[] generateRandomArray(int size, int minValue, int maxValue) {
         Integer[] array = new Integer[size];

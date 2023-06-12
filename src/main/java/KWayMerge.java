@@ -6,32 +6,34 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class KWayMerge {
+public class KWayMerge<T extends Comparable<T>> {
     private static final String CHUNKS_DIRECTORY = "tmp/chunks/testChunks/";
     private static final int MAX_SIZE = 10;
     private static final int BUFFER_SIZE = 1000;
-    private Queue<Chunk> chunksToMerge;
+    private Queue<Chunk<T>> chunksToMerge;
+    private ElementConverter<T> converter;
 
-    public KWayMerge()
+    public KWayMerge(ElementConverter<T> converter)
     {
         this.chunksToMerge = new LinkedList<>();
-    } // end default construtor
+        this.converter = converter;
+    } // end default constructor
 
     public void mergeAllChunks(List<String> chunkLocations)
     {
-        List<Integer> loadedChunk;
-        PriorityQueue<Integer> chunkQueue;
-        ChunkProcessor chunkProcessor;
-        Chunk left;
-        Chunk right;
-        Chunk mergedChunk;
+        List<T> loadedChunk;
+        PriorityQueue<T> chunkQueue;
+        ChunkProcessor<T> chunkProcessor;
+        Chunk<T> left;
+        Chunk<T> right;
+        Chunk<T> mergedChunk;
         
         // Load in initial chunks into queues 
         for(String chunkLocation : chunkLocations)
         {
-            chunkProcessor = new ChunkProcessor(chunkLocation);
+            chunkProcessor = new ChunkProcessor<>(chunkLocation);
 
-            loadedChunk = chunkProcessor.loadNElements(KWayMerge.MAX_SIZE);
+            loadedChunk = chunkProcessor.loadNElements(KWayMerge.MAX_SIZE, this.converter);
             if(loadedChunk == null)
             {
                 chunkProcessor.deleteChunkFromFile();
@@ -41,10 +43,8 @@ public class KWayMerge {
             System.out.println("Loading chunk " + loadedChunk);
 
             chunkQueue = new PriorityQueue<>(loadedChunk);
-            
-            System.out.println(chunkQueue);
 
-            left = new Chunk(chunkQueue, chunkProcessor);
+            left = new Chunk<>(chunkQueue, chunkProcessor, this.converter);
             this.chunksToMerge.add(left);
         } // end for
 
@@ -56,7 +56,7 @@ public class KWayMerge {
 
             left = this.chunksToMerge.poll();
             chunkQueue = new PriorityQueue<>();
-            right = new Chunk(chunkQueue, null);
+            right = new Chunk<>(chunkQueue, null, this.converter);
 
             String mergedChunkLocation = KWayMerge.CHUNKS_DIRECTORY + "finalMergedChunks.txt";
             merge(left, right, mergedChunkLocation);
@@ -78,17 +78,17 @@ public class KWayMerge {
             } // end if
             merge(left, right, mergedChunkLocation);
 
-            chunkProcessor = new ChunkProcessor(mergedChunkLocation);
-            chunkQueue = new PriorityQueue<>(chunkProcessor.loadNElements(KWayMerge.MAX_SIZE));
-            mergedChunk = new Chunk(chunkQueue, chunkProcessor);
+            chunkProcessor = new ChunkProcessor<>(mergedChunkLocation);
+            chunkQueue = new PriorityQueue<>(chunkProcessor.loadNElements(KWayMerge.MAX_SIZE, this.converter));
+            mergedChunk = new Chunk<>(chunkQueue, chunkProcessor, this.converter);
             this.chunksToMerge.add(mergedChunk);
 
-            left.delete();
-            right.delete();
+            //left.delete();
+            //right.delete();
         } // end while
     } // end mergeAllChunks
 
-    private void merge(Chunk left, Chunk right, String outputFile) 
+    private void merge(Chunk<T> left, Chunk<T> right, String outputFile) 
     {
         try {
             FileWriter fileWriter = new FileWriter(outputFile, true);
@@ -96,9 +96,13 @@ public class KWayMerge {
 
             StringBuilder mergedData = new StringBuilder();
 
+            int comparingNumber = 0;
+
             while(!left.isEmpty() && !right.isEmpty())
             {
-                if(left.getNextElement() <= right.getNextElement()) {
+                comparingNumber = left.getNextElement().compareTo(right.getNextElement());
+
+                if(comparingNumber <= 0) {
                     mergedData.append(left.removeNextElement());
                     mergedData.append(System.lineSeparator());
 

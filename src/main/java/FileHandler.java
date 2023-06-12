@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileHanlder {
-    public FileHanlder()
+public class FileHandler {
+    public FileHandler()
     {
 
     } // end default constructor

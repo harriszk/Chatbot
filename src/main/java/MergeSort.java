@@ -46,7 +46,7 @@ public class MergeSort {
 
             comparingNumber = left.get(0).compareTo(right.get(0));
 
-            if(comparingNumber < 0 || comparingNumber == 0) {
+            if(comparingNumber <= 0) {
                 result.add(left.get(0));
                 left.remove(0);
             } else {
