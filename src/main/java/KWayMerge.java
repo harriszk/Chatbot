@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class KWayMerge<T extends Comparable<T>> {
-    private static final String CHUNKS_DIRECTORY = "tmp/chunks/testChunks/";
+    private static final String CHUNKS_DIRECTORY = "tmp/chunks/";
     private static final int MAX_SIZE = 3;
     private static final int BUFFER_SIZE = 1000;
     private Queue<Chunk<T>> chunksToMerge;
@@ -45,6 +45,7 @@ public class KWayMerge<T extends Comparable<T>> {
             chunkQueue = new PriorityQueue<>(loadedChunk);
 
             left = new Chunk<>(chunkQueue, chunkProcessor, this.converter);
+            left.setDeleteFlag(false);
             this.chunksToMerge.add(left);
         } // end for
 
@@ -83,8 +84,8 @@ public class KWayMerge<T extends Comparable<T>> {
             mergedChunk = new Chunk<>(chunkQueue, chunkProcessor, this.converter);
             this.chunksToMerge.add(mergedChunk);
 
-            //left.delete();
-            //right.delete();
+            left.delete();
+            right.delete();
         } // end while
     } // end mergeAllChunks
 

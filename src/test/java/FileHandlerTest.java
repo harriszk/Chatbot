@@ -25,7 +25,7 @@ public class FileHandlerTest {
     {
         List<Integer> expected = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16));
 
-        List<Integer> actual = this.fileHandler.loadChunkFromFile("testLoadingChunksFile.txt", this.converter);
+        List<Integer> actual = this.fileHandler.loadChunkFromFile(TEST_DIRECTORY + "/testLoadingChunksFile.txt", this.converter);
 
         Assert.assertEquals(expected, actual);
     } // end testLoadEntriesFromFile

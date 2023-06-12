@@ -11,6 +11,7 @@ public class Chunk<T extends Comparable<T>> {
     private ChunkProcessor<T> processor;
     private int elementsRemovedCounter = 0;
     private ElementConverter<T> converter;
+    private boolean deleteFile = true;
 
     public Chunk(Queue<T> queue, ChunkProcessor<T> processor, ElementConverter<T> converter)
     {
@@ -49,8 +50,16 @@ public class Chunk<T extends Comparable<T>> {
         } // end if
     } // end loadNewElementsIfNeeded
 
+    public void setDeleteFlag(boolean flag)
+    {
+        this.deleteFile = flag;
+    } // end setDeleteFlag
+
     public void delete()
     {
-        this.processor.deleteChunkFromFile();
+        if(this.deleteFile)
+        {
+            this.processor.deleteChunkFromFile();
+        } // end if
     } // end delete
 } // end Chunk

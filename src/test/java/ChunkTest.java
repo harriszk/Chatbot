@@ -8,6 +8,7 @@ import org.junit.Test;
 
 public class ChunkTest {
     private static final int MAX_SIZE = 3;
+    private static final String TEST_CHUNKS_DIRECTORY = "tmp/chunks/testChunks";
     private ChunkProcessor<Integer> processor;
     private Queue<Integer> queue;
     private IntegerConverter converter = new IntegerConverter();
@@ -16,7 +17,7 @@ public class ChunkTest {
     @Before
     public void setup() 
     {
-        this.processor = new ChunkProcessor<>("testLoadingChunksFile.txt");
+        this.processor = new ChunkProcessor<>(TEST_CHUNKS_DIRECTORY + "/testLoadingChunksFile.txt");
         this.queue = new PriorityQueue<>(MAX_SIZE);
         this.queue.addAll(this.processor.loadNElements(MAX_SIZE, this.converter));
 
@@ -89,9 +90,9 @@ public class ChunkTest {
     {
         Integer[] testChunk = {2, 7, 9, 12, 15, 19, 23, 26, 27, 28, 30, 31, 36, 38};
         FileHandler fileHandler = new FileHandler();
-        fileHandler.writeChunkToFile("tmp/chunks/testChunks/test.txt", testChunk);
+        fileHandler.writeChunkToFile(TEST_CHUNKS_DIRECTORY + "/test.txt", testChunk);
 
-        this.processor = new ChunkProcessor<>("tmp/chunks/testChunks/test.txt");
+        this.processor = new ChunkProcessor<>(TEST_CHUNKS_DIRECTORY + "/test.txt");
         this.queue = new PriorityQueue<>(MAX_SIZE);
         this.queue.addAll(this.processor.loadNElements(MAX_SIZE, this.converter));
 
@@ -99,7 +100,7 @@ public class ChunkTest {
 
         this.chunk.delete();
 
-        File chunkFile = new File("tmp/chunks/testChunks/test.txt");
+        File chunkFile = new File(TEST_CHUNKS_DIRECTORY + "/test.txt");
         Assert.assertFalse(chunkFile.exists());
     } // end testDelete
 } // end ChunkTest
