@@ -12,7 +12,7 @@ public class ChunkProcessorTest {
     private FileHandler fileHandler = new FileHandler();
     private IntegerConverter converter = new IntegerConverter();
 
-    private int[] testChunk = {2, 7, 9, 12, 15, 19, 23, 26, 27, 28, 30, 31, 36, 38};
+    private Integer[] testChunk = {2, 7, 9, 12, 15, 19, 23, 26, 27, 28, 30, 31, 36, 38};
 
     @Before
     public void setUp()

@@ -7,9 +7,19 @@ public class ChatMessage implements Comparable<ChatMessage> {
     private String username;
     private String message;
 
+    public ChatMessage()
+    {
+
+    } // end default constructor 
+
     // Data should have the format: [<timestamp>] #<channel_name> <username>: <message>
     public ChatMessage(String data)
     {
+        if(data == "")
+        {
+            return;
+        } // end if
+
         String[] dataArray = data.split(" ", 5);
         String dateString = (dataArray[0] + " " + dataArray[1]).substring(1).split("]")[0];
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -70,6 +80,43 @@ public class ChatMessage implements Comparable<ChatMessage> {
 
     @Override
     public int compareTo(ChatMessage message) {
+        if(message.timestamp == null)
+        {
+            return -1;
+        } // end if
+
+        if(this.timestamp == null)
+        {
+            return 1;
+        } // end if
+
         return this.timestamp.compareTo(message.timestamp);
     } // end compareTo
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        ChatMessage otherMessage = (ChatMessage) obj;
+        return this.toString().equals(otherMessage.toString());
+    } // end equals
+
+    @Override
+    public String toString()
+    {
+        if(this.timestamp == null || this.channelName == null || this.username == null|| this.message == null)
+        {
+            return "";
+        } // end if 
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedTimestamp = this.timestamp.format(formatter);
+        return String.format("[%s] #%s %s: %s", formattedTimestamp, this.channelName, this.username, this.message);
+    } // end toString
 } // end ChatMessage

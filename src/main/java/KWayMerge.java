@@ -8,7 +8,7 @@ import java.util.Queue;
 
 public class KWayMerge<T extends Comparable<T>> {
     private static final String CHUNKS_DIRECTORY = "tmp/chunks/testChunks/";
-    private static final int MAX_SIZE = 10;
+    private static final int MAX_SIZE = 3;
     private static final int BUFFER_SIZE = 1000;
     private Queue<Chunk<T>> chunksToMerge;
     private ElementConverter<T> converter;

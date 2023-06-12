@@ -34,11 +34,11 @@ public class MergeSortTest {
     {
         Integer[] leftArray = {1, 2, 4, 5, 7, 9};
         Integer[] rightArray = {1, 2, 3, 5, 6, 8};
-        Integer[] expecetedArray = {1, 1, 2, 2, 3, 4, 5, 5, 6, 7, 8, 9};
+        Integer[] expectedArray = {1, 1, 2, 2, 3, 4, 5, 5, 6, 7, 8, 9};
 
         List<Integer> left = new ArrayList<>(Arrays.asList(leftArray));
         List<Integer> right = new ArrayList<>(Arrays.asList(rightArray));
-        List<Integer> expected = new ArrayList<>(Arrays.asList(expecetedArray));
+        List<Integer> expected = new ArrayList<>(Arrays.asList(expectedArray));
 
         List<Integer> actual = this.sorter.merge(left, right);
         Assert.assertEquals(expected, actual);
@@ -95,8 +95,8 @@ public class MergeSortTest {
         Integer[] unorderedArray = {5, 8, 2, 1, 9, 4};
         List<Integer> elementsToSort = new ArrayList<>(Arrays.asList(unorderedArray));
 
-        Integer[] expecetedArray = {1, 2, 4, 5, 8, 9};
-        List<Integer> expected = new ArrayList<>(Arrays.asList(expecetedArray));
+        Integer[] expectedArray = {1, 2, 4, 5, 8, 9};
+        List<Integer> expected = new ArrayList<>(Arrays.asList(expectedArray));
         
         elementsToSort = this.sorter.sort(elementsToSort);
         Assert.assertEquals(expected, elementsToSort);

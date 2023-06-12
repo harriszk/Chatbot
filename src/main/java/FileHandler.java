@@ -12,10 +12,10 @@ public class FileHandler {
 
     } // end default constructor
 
-    public List<Integer> loadChunkFromFile(String filePathName) {
-        List<Integer> chunk = new ArrayList<>();
+    public <T> List<T> loadChunkFromFile(String filePathName, ElementConverter<T> converter) {
+        List<T> chunk = new ArrayList<>();
         String line;
-        int number;
+        T element;
 
         File file = new File(filePathName);
         if(!file.exists()) 
@@ -28,8 +28,13 @@ public class FileHandler {
 
             while((line = reader.readLine()) != null) 
             {
-                number = Integer.parseInt(line);
-                chunk.add(number);
+                if(line.equals(""))
+                {
+                    continue;
+                } // end if
+
+                element = converter.convert(line);
+                chunk.add(element);
             } // end while
 
             reader.close();
@@ -40,7 +45,7 @@ public class FileHandler {
         return chunk;
     } // end loadChunkFromFile
 
-    public void writeChunkToFile(String filePathName, int[] chunk)
+    public <T> void writeChunkToFile(String filePathName, T[] chunk)
     {
         //String chunkFileName = "chunk_" + chunk.toString() + ".txt";
 
@@ -55,7 +60,7 @@ public class FileHandler {
 
             for(int i = 0; i < chunk.length; i++) 
             {
-                writer.write(Integer.toString(chunk[i]) + "\n");
+                writer.write(chunk[i].toString() + "\n");
             } // end for
 
             writer.close();

@@ -87,7 +87,7 @@ public class ChunkTest {
     @Test
     public void testDelete() 
     {
-        int[] testChunk = {2, 7, 9, 12, 15, 19, 23, 26, 27, 28, 30, 31, 36, 38};
+        Integer[] testChunk = {2, 7, 9, 12, 15, 19, 23, 26, 27, 28, 30, 31, 36, 38};
         FileHandler fileHandler = new FileHandler();
         fileHandler.writeChunkToFile("tmp/chunks/testChunks/test.txt", testChunk);
 

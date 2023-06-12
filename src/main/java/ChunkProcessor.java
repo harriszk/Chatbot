@@ -34,7 +34,7 @@ public class ChunkProcessor<T> {
                 this.previousPosition = this.randomAccessFile.getFilePointer();
 
                 line = this.randomAccessFile.readLine();
-                if(line == null)
+                if(line == null || line == System.lineSeparator())
                 {
                     break;
                 } // end if
