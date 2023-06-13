@@ -1,23 +1,21 @@
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ChatLogTest {
-    private ChatLog chatLog;
+    private ChatLog<Integer> chatLog;
     private FileHandler fileHandler = new FileHandler();
-    private static int CHUNK_SIZE = 500;
+    private static int CHUNK_SIZE = 5000;
 
     @Before
     public void setUp()
     {
-        this.chatLog = new ChatLog();
+        this.chatLog = new ChatLog<>(new IntegerConverter());
     } // end setUp
 
     @Test
@@ -222,7 +220,45 @@ public class ChatLogTest {
     @Test
     public void testMergeSortingSingleChunk() {
         // Test if a single chunk can be correctly merge sorted and written to a final output file
-        Assert.fail("TODO: Add test implementation");
+        String directoryPath = "tmp/unsortedFiles";
+
+        File directory = new File(directoryPath);
+        if(directory.exists()) 
+        {
+            this.deleteDirectory(directory);
+        } // end if
+
+        boolean created = directory.mkdirs();
+        Assert.assertTrue("Failed to create the empty folder.", created);
+
+        Integer[] unsortedTestArray1 = this.generateRandomArray(50000, 10000, 1000000);
+        Integer[] unsortedTestArray2 = this.generateRandomArray(50000, 10000, 1000000);
+        Integer[] unsortedTestArray3 = this.generateRandomArray(50000, 10000, 1000000);
+        Integer[] unsortedTestArray4 = this.generateRandomArray(50000, 10000, 1000000);
+        Integer[] unsortedTestArray5 = this.generateRandomArray(50000, 10000, 1000000);
+
+        List<Integer[]> unsortedArrays = new ArrayList<>();
+        unsortedArrays.add(unsortedTestArray1);
+        unsortedArrays.add(unsortedTestArray2);
+        unsortedArrays.add(unsortedTestArray3);
+        unsortedArrays.add(unsortedTestArray4);
+        unsortedArrays.add(unsortedTestArray5);
+
+        String testFilePath;
+
+        for(int i = 0; i < unsortedArrays.size(); i++)
+        {
+            testFilePath = directoryPath + "/testUnsorted" + (i + 1) + ".txt";
+            this.fileHandler.writeChunkToFile(testFilePath, unsortedArrays.get(i));
+        } // end for
+
+        this.chatLog.chunkLogs(directoryPath, ChatLogTest.CHUNK_SIZE);
+
+        this.chatLog.mergeChunks();
+
+        this.deleteDirectory(directory);
+
+        //Assert.fail("TODO: Add test implementation");
     } // end testMergeSortingSingleChunk
 
     @Test

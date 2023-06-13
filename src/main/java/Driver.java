@@ -1,24 +1,10 @@
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
 public class Driver {
-    public static void main(String[] args) throws IOException {
-        /*
-        Integer[] randomArray = generateRandomArray(100000, 0, 100000);
-        List<Integer> elementsToSort = new ArrayList<>(Arrays.asList(randomArray));
-        //System.out.println(elementsToSort);
+    public static void main(String[] args) {
+        ChatLog<ChatMessage> chatLog = new ChatLog<>(new ChatMessageConverter());
 
-        MergeSort sorter = new MergeSort();
-        elementsToSort = sorter.sort(elementsToSort);
-        //System.out.println(elementsToSort);
-        */
+        chatLog.chunkLogs("testLogs", 500);
 
-        Integer[] test = generate(50, 1, 1000);
-        List<Integer> elementsToSort = new ArrayList<>(Arrays.asList(test));
-        System.out.println(elementsToSort);
+        chatLog.mergeChunks();
     } // end main
 
     public static Integer[] generate(int select, int minVal, int maxVal) {
@@ -54,16 +40,4 @@ public class Driver {
 
         return result;
     }
-
-    public static Integer[] generateRandomArray(int size, int minValue, int maxValue) {
-        Integer[] array = new Integer[size];
-        Random random = new Random();
-
-        for (int i = 0; i < size; i++) 
-        {
-            array[i] = random.nextInt(maxValue - minValue + 1) + minValue;
-        } // end for
-
-        return array;
-    } // end generateRandomArray
 } // end Driver

@@ -38,12 +38,11 @@ public class KWayMerge<T extends Comparable<T>> {
                 break;
             } // end if
 
-            System.out.println("Loading chunk " + loadedChunk);
-
             chunkQueue = new PriorityQueue<>(loadedChunk);
 
             left = new Chunk<>(chunkQueue, chunkProcessor, this.converter);
-            left.setDeleteFlag(false);
+            // Uncomment this if you don't want the initial chunks to be deleted.
+            //left.setDeleteFlag(false);
             this.chunksToMerge.add(left);
         } // end for
 
@@ -57,7 +56,7 @@ public class KWayMerge<T extends Comparable<T>> {
             chunkQueue = new PriorityQueue<>();
             right = new Chunk<>(chunkQueue, null, this.converter);
 
-            String mergedChunkLocation = KWayMerge.CHUNKS_DIRECTORY + "finalMergedChunks.txt";
+            String mergedChunkLocation = "finalMergedChunks.txt";
             merge(left, right, mergedChunkLocation);
             left.delete();
         } // end if
@@ -65,13 +64,14 @@ public class KWayMerge<T extends Comparable<T>> {
         // Merge chunks until only one chunk remains
         while(this.chunksToMerge.size() > 1) 
         {
+            System.out.println(this.chunksToMerge.size() + " merges left...");
             left = this.chunksToMerge.poll();
             right = this.chunksToMerge.poll();
 
             String mergedChunkLocation;
 
             if(this.chunksToMerge.size() == 0) {
-                mergedChunkLocation = KWayMerge.CHUNKS_DIRECTORY + "finalMergedChunks.txt";
+                mergedChunkLocation = "finalMergedChunks.txt";
             } else {
                 mergedChunkLocation = KWayMerge.CHUNKS_DIRECTORY + "merged_chunk_" + System.currentTimeMillis() + ".txt";
             } // end if
@@ -115,6 +115,7 @@ public class KWayMerge<T extends Comparable<T>> {
 
                 this.tryWritingToBuffer(mergedData, bufferedWriter);
             } // end while
+
 
             // Write the remaining elements from either the left or the right chunk.
             while(!left.isEmpty()) 

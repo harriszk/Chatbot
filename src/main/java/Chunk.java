@@ -61,5 +61,7 @@ public class Chunk<T extends Comparable<T>> {
         {
             this.processor.deleteChunkFromFile();
         } // end if
+
+        this.processor.close();
     } // end delete
 } // end Chunk

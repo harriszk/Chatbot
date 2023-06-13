@@ -22,7 +22,7 @@ public class ChatMessage implements Comparable<ChatMessage> {
 
         String[] dataArray = data.split(" ", 5);
         String dateString = (dataArray[0] + " " + dataArray[1]).substring(1).split("]")[0];
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d HH:mm:ss");
 
         this.timestamp = LocalDateTime.parse(dateString, formatter);
         this.channelName = dataArray[2].substring(1);

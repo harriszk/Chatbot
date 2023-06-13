@@ -5,16 +5,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatLog {
-    private MergeSort sorter = new MergeSort();
-    private List<String> chunkLocations = new ArrayList<>();
-    private IntegerConverter converter = new IntegerConverter();
-    private FileHandler fileHandler = new FileHandler();
+public class ChatLog<T extends Comparable<T>> {
     private static String CHUNK_DIRECTORY = "tmp/chunks/";
+    private List<String> chunkLocations = new ArrayList<>();
+    private FileHandler fileHandler = new FileHandler();
+    private MergeSort sorter = new MergeSort();
+    private KWayMerge<T> merger;
+    private ElementConverter<T> converter;
 
-    public ChatLog()
+    public ChatLog(ElementConverter<T> converter)
     {
-
+        this.converter = converter;
+        this.merger = new KWayMerge<>(this.converter);
     } // end default constructor
 
     public void chunkLogs(String path, int chunkSize)
@@ -28,11 +30,11 @@ public class ChatLog {
 
         System.out.println(filePaths);
 
-        List<Integer> chunk = new ArrayList<>();
+        List<T> chunk = new ArrayList<>();
         String line, chunkLocation;
-        int numberOfChunks = 1;
+        //int numberOfChunks = 1;
         int elementCount = 0;
-        int element;
+        T element;
 
         for(String filePath : filePaths)
         {
@@ -44,22 +46,26 @@ public class ChatLog {
                         continue;
                     } // end if
 
+                    //System.out.println("Loading '" + line + "'");
+
                     // Process the line and extract the entry
                     element = converter.convert(line);
                     chunk.add(element);
                     elementCount++;
 
+                    //System.out.println(element.toString());
+
                     if(elementCount == chunkSize) 
                     {
                         chunk = this.sorter.sort(chunk);
                         // Write the chunk to a chunk file
-                        chunkLocation = ChatLog.CHUNK_DIRECTORY + "chunk"  + numberOfChunks + ".txt";
+                        chunkLocation = ChatLog.CHUNK_DIRECTORY + "chunk_"  + System.currentTimeMillis() + ".txt";
                         this.fileHandler.writeChunkToFile(chunkLocation, chunk.toArray());
 
                         this.chunkLocations.add(chunkLocation);
                         chunk.clear();
                         elementCount = 0;
-                        numberOfChunks++;
+                        //numberOfChunks++;
                     } // end if
                 } // end while
             } catch (IOException e) {
@@ -71,12 +77,21 @@ public class ChatLog {
         if(!chunk.isEmpty()) 
         {
             chunk = this.sorter.sort(chunk);
-            chunkLocation = ChatLog.CHUNK_DIRECTORY + "chunk"  + numberOfChunks + ".txt";
-            this.fileHandler.writeChunkToFile("tmp/chunks/chunk" + numberOfChunks + ".txt", chunk.toArray());
+            chunkLocation = ChatLog.CHUNK_DIRECTORY + "chunk_"  + System.currentTimeMillis() + ".txt";
+            this.fileHandler.writeChunkToFile(chunkLocation, chunk.toArray());
             this.chunkLocations.add(chunkLocation);
             chunk.clear();
         } // end if
     } // end chunkLogs
+
+    public void mergeChunks()
+    {
+        System.out.println("=================== mergeChunks() ===================");
+        System.out.println(this.chunkLocations);
+        System.out.println(this.chunkLocations.size());
+
+        this.merger.mergeAllChunks(this.chunkLocations);
+    } // end mergeChunks
 
     public List<String> getChunkLocations()
     {

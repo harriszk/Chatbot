@@ -1,7 +1,11 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +32,7 @@ public class ChunkProcessor<T> {
             String line;
             T element;
             int count = 0;
-
+            
             while(true) 
             {
                 this.previousPosition = this.randomAccessFile.getFilePointer();
@@ -38,6 +42,7 @@ public class ChunkProcessor<T> {
                 {
                     break;
                 } // end if
+                line = new String(line.getBytes("ISO-8859-1"), "UTF-8");
 
                 if(count == N)
                 {
@@ -48,7 +53,7 @@ public class ChunkProcessor<T> {
                 elements.add(element);
                 count++;
             } // end while
-            
+
             this.randomAccessFile.seek(previousPosition);
         } catch (IOException e) {
             e.printStackTrace();
