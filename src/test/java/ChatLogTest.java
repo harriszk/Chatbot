@@ -12,7 +12,7 @@ import org.junit.Test;
 public class ChatLogTest {
     private ChatLog chatLog;
     private FileHandler fileHandler = new FileHandler();
-    private static int CHUNK_SIZE = 100;
+    private static int CHUNK_SIZE = 500;
 
     @Before
     public void setUp()
@@ -34,7 +34,7 @@ public class ChatLogTest {
         boolean created = directory.mkdirs();
         Assert.assertTrue("Failed to create the empty folder.", created);
 
-        this.chatLog.chunkLogs(directoryPath);
+        this.chatLog.chunkLogs(directoryPath, ChatLogTest.CHUNK_SIZE);
 
         Assert.assertTrue(this.chatLog.getChunkLocations().isEmpty());
 
@@ -61,7 +61,7 @@ public class ChatLogTest {
         String testFilePath = directoryPath + "/testUnsorted.txt";
         this.fileHandler.writeChunkToFile(testFilePath, unsortedTestArray);
 
-        this.chatLog.chunkLogs(directoryPath);
+        this.chatLog.chunkLogs(directoryPath, ChatLogTest.CHUNK_SIZE);
 
         List<String> chunkLocations = this.chatLog.getChunkLocations();
         Assert.assertFalse("No chunks were created.", chunkLocations.isEmpty());
@@ -111,7 +111,7 @@ public class ChatLogTest {
             this.fileHandler.writeChunkToFile(testFilePath, unsortedArrays.get(i));
         } // end for
 
-        this.chatLog.chunkLogs(directoryPath);
+        this.chatLog.chunkLogs(directoryPath, ChatLogTest.CHUNK_SIZE);
 
         List<String> chunkLocations = this.chatLog.getChunkLocations();
         Assert.assertFalse("No chunks were created.", chunkLocations.isEmpty());
@@ -159,7 +159,7 @@ public class ChatLogTest {
             this.fileHandler.writeChunkToFile(testFilePath, unsortedArrays.get(i));
         } // end for
 
-        this.chatLog.chunkLogs(directoryPath);
+        this.chatLog.chunkLogs(directoryPath, ChatLogTest.CHUNK_SIZE);
 
         List<String> chunkLocations = this.chatLog.getChunkLocations();
         Assert.assertFalse("No chunks were created.", chunkLocations.isEmpty());
@@ -207,7 +207,7 @@ public class ChatLogTest {
             this.fileHandler.writeChunkToFile(testFilePath, unsortedArrays.get(i));
         } // end for
 
-        this.chatLog.chunkLogs(directoryPath);
+        this.chatLog.chunkLogs(directoryPath, ChatLogTest.CHUNK_SIZE);
 
         List<String> chunkLocations = this.chatLog.getChunkLocations();
         Assert.assertFalse("No chunks were created.", chunkLocations.isEmpty());
@@ -217,9 +217,6 @@ public class ChatLogTest {
 
         this.deleteChunks(chunkLocations);
         this.deleteDirectory(directory);
-
-
-        Assert.fail("TODO: Add test implementation");
     } // end testChunkingWithDifferentN
 
     @Test
