@@ -100,7 +100,7 @@ public class ChunkProcessor<T> {
             return false;
         } // end if
 
-        ChunkProcessor other = (ChunkProcessor) obj;
+        ChunkProcessor<T> other = (ChunkProcessor)obj;
         return Objects.equals(randomAccessFile, other.randomAccessFile);
     } // end equals
 } // end ChunkProcessor

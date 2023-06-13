@@ -47,8 +47,6 @@ public class FileHandler {
 
     public <T> void writeChunkToFile(String filePathName, T[] chunk)
     {
-        //String chunkFileName = "chunk_" + chunk.toString() + ".txt";
-
         File chunkFile = new File(filePathName);
         if(chunkFile.exists()) 
         {

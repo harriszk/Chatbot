@@ -21,19 +21,17 @@ public class KWayMerge<T extends Comparable<T>> {
 
     public void mergeAllChunks(List<String> chunkLocations)
     {
-        List<T> loadedChunk;
         PriorityQueue<T> chunkQueue;
         ChunkProcessor<T> chunkProcessor;
         Chunk<T> left;
         Chunk<T> right;
-        Chunk<T> mergedChunk;
         
         // Load in initial chunks into queues 
         for(String chunkLocation : chunkLocations)
         {
             chunkProcessor = new ChunkProcessor<>(chunkLocation);
 
-            loadedChunk = chunkProcessor.loadNElements(KWayMerge.MAX_SIZE, this.converter);
+            List<T> loadedChunk = chunkProcessor.loadNElements(KWayMerge.MAX_SIZE, this.converter);
             if(loadedChunk == null)
             {
                 chunkProcessor.deleteChunkFromFile();
@@ -81,7 +79,7 @@ public class KWayMerge<T extends Comparable<T>> {
 
             chunkProcessor = new ChunkProcessor<>(mergedChunkLocation);
             chunkQueue = new PriorityQueue<>(chunkProcessor.loadNElements(KWayMerge.MAX_SIZE, this.converter));
-            mergedChunk = new Chunk<>(chunkQueue, chunkProcessor, this.converter);
+            Chunk<T> mergedChunk = new Chunk<>(chunkQueue, chunkProcessor, this.converter);
             this.chunksToMerge.add(mergedChunk);
 
             left.delete();
