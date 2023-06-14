@@ -9,8 +9,8 @@ import java.util.Queue;
 public class Chunk<T extends Comparable<T>> {
     private Queue<T> queue;
     private ChunkProcessor<T> processor;
-    private int elementsRemovedCounter = 0;
     private ElementConverter<T> converter;
+    private int elementsRemovedCounter = 0;
     private boolean deleteFile = true;
 
     public Chunk(Queue<T> queue, ChunkProcessor<T> processor, ElementConverter<T> converter)
@@ -22,46 +22,46 @@ public class Chunk<T extends Comparable<T>> {
 
     public boolean isEmpty()
     {
-        return this.queue.isEmpty();
+        return queue.isEmpty();
     } // end isEmpty
 
     public T getNextElement()
     {
-        return this.queue.peek();
+        return queue.peek();
     } // end getNextElement
 
     public T removeNextElement()
     {
-        this.elementsRemovedCounter++;
-        return this.queue.poll();
+        elementsRemovedCounter++;
+        return queue.poll();
     } // end removeNextElement
 
     public void loadNewElementsIfNeeded(int MAX) {
-        if(this.elementsRemovedCounter >= MAX) 
+        if(elementsRemovedCounter >= MAX) 
         {
-            List<T> newElements = this.processor.loadNElements(MAX, this.converter);
+            List<T> newElements = processor.loadNElements(MAX, converter);
 
             if(newElements != null)
             {
-                this.queue.addAll(newElements);
+                queue.addAll(newElements);
             } // end if
             
-            this.elementsRemovedCounter = 0;
+            elementsRemovedCounter = 0;
         } // end if
     } // end loadNewElementsIfNeeded
 
     public void setDeleteFlag(boolean flag)
     {
-        this.deleteFile = flag;
+        deleteFile = flag;
     } // end setDeleteFlag
 
     public void delete()
     {
-        if(this.deleteFile)
+        if(deleteFile)
         {
-            this.processor.deleteChunkFromFile();
+            processor.deleteChunkFromFile();
         } // end if
 
-        this.processor.close();
+        processor.close();
     } // end delete
 } // end Chunk

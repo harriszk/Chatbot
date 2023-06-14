@@ -15,7 +15,7 @@ public class KWayMerge<T extends Comparable<T>> {
 
     public KWayMerge(ElementConverter<T> converter)
     {
-        this.chunksToMerge = new LinkedList<>();
+        chunksToMerge = new LinkedList<>();
         this.converter = converter;
     } // end default constructor
 
@@ -31,7 +31,7 @@ public class KWayMerge<T extends Comparable<T>> {
         {
             chunkProcessor = new ChunkProcessor<>(chunkLocation);
 
-            List<T> loadedChunk = chunkProcessor.loadNElements(KWayMerge.MAX_SIZE, this.converter);
+            List<T> loadedChunk = chunkProcessor.loadNElements(KWayMerge.MAX_SIZE, converter);
             if(loadedChunk == null)
             {
                 chunkProcessor.deleteChunkFromFile();
@@ -40,21 +40,21 @@ public class KWayMerge<T extends Comparable<T>> {
 
             chunkQueue = new PriorityQueue<>(loadedChunk);
 
-            left = new Chunk<>(chunkQueue, chunkProcessor, this.converter);
+            left = new Chunk<>(chunkQueue, chunkProcessor, converter);
             // Uncomment this if you don't want the initial chunks to be deleted.
             //left.setDeleteFlag(false);
-            this.chunksToMerge.add(left);
+            chunksToMerge.add(left);
         } // end for
 
         // If there was just a single chunk then we basically just rename it
         // although it does go through the formality of doing the merge.
-        if(this.chunksToMerge.size() == 1)
+        if(chunksToMerge.size() == 1)
         {
             // TODO: Change this to just rename the chunk's file name to "finalMergedChunks.txt".
 
-            left = this.chunksToMerge.poll();
+            left = chunksToMerge.poll();
             chunkQueue = new PriorityQueue<>();
-            right = new Chunk<>(chunkQueue, null, this.converter);
+            right = new Chunk<>(chunkQueue, null, converter);
 
             String mergedChunkLocation = "finalMergedChunks.txt";
             merge(left, right, mergedChunkLocation);
@@ -62,15 +62,15 @@ public class KWayMerge<T extends Comparable<T>> {
         } // end if
 
         // Merge chunks until only one chunk remains
-        while(this.chunksToMerge.size() > 1) 
+        while(chunksToMerge.size() > 1) 
         {
-            System.out.println(this.chunksToMerge.size() + " merges left...");
-            left = this.chunksToMerge.poll();
-            right = this.chunksToMerge.poll();
+            System.out.println(chunksToMerge.size() + " merges left...");
+            left = chunksToMerge.poll();
+            right = chunksToMerge.poll();
 
             String mergedChunkLocation;
 
-            if(this.chunksToMerge.size() == 0) {
+            if(chunksToMerge.size() == 0) {
                 mergedChunkLocation = "finalMergedChunks.txt";
             } else {
                 mergedChunkLocation = KWayMerge.CHUNKS_DIRECTORY + "merged_chunk_" + System.currentTimeMillis() + ".txt";
@@ -78,9 +78,9 @@ public class KWayMerge<T extends Comparable<T>> {
             merge(left, right, mergedChunkLocation);
 
             chunkProcessor = new ChunkProcessor<>(mergedChunkLocation);
-            chunkQueue = new PriorityQueue<>(chunkProcessor.loadNElements(KWayMerge.MAX_SIZE, this.converter));
-            Chunk<T> mergedChunk = new Chunk<>(chunkQueue, chunkProcessor, this.converter);
-            this.chunksToMerge.add(mergedChunk);
+            chunkQueue = new PriorityQueue<>(chunkProcessor.loadNElements(KWayMerge.MAX_SIZE, converter));
+            Chunk<T> mergedChunk = new Chunk<>(chunkQueue, chunkProcessor, converter);
+            chunksToMerge.add(mergedChunk);
 
             left.delete();
             right.delete();
@@ -113,7 +113,7 @@ public class KWayMerge<T extends Comparable<T>> {
                     right.loadNewElementsIfNeeded(KWayMerge.MAX_SIZE);
                 } // end if
 
-                this.tryWritingToBuffer(mergedData, bufferedWriter);
+                tryWritingToBuffer(mergedData, bufferedWriter);
             } // end while
 
 
@@ -125,7 +125,7 @@ public class KWayMerge<T extends Comparable<T>> {
 
                 left.loadNewElementsIfNeeded(KWayMerge.MAX_SIZE);
 
-                this.tryWritingToBuffer(mergedData, bufferedWriter);
+                tryWritingToBuffer(mergedData, bufferedWriter);
             } // end while
 
             while(!right.isEmpty()) 
@@ -135,7 +135,7 @@ public class KWayMerge<T extends Comparable<T>> {
 
                 right.loadNewElementsIfNeeded(KWayMerge.MAX_SIZE);
 
-                this.tryWritingToBuffer(mergedData, bufferedWriter);
+                tryWritingToBuffer(mergedData, bufferedWriter);
             } // end while
 
             bufferedWriter.write(mergedData.toString());

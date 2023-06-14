@@ -1,11 +1,7 @@
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +15,7 @@ public class ChunkProcessor<T> {
     {
         this.chunkFilePath = chunkFilePath;
         try {
-            this.randomAccessFile = new RandomAccessFile(chunkFilePath, "r");
+            randomAccessFile = new RandomAccessFile(chunkFilePath, "r");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } // end try/catch
@@ -35,9 +31,9 @@ public class ChunkProcessor<T> {
             
             while(true) 
             {
-                this.previousPosition = this.randomAccessFile.getFilePointer();
+                previousPosition = randomAccessFile.getFilePointer();
 
-                line = this.randomAccessFile.readLine();
+                line = randomAccessFile.readLine();
                 if(line == null || line == System.lineSeparator())
                 {
                     break;
@@ -54,7 +50,7 @@ public class ChunkProcessor<T> {
                 count++;
             } // end while
 
-            this.randomAccessFile.seek(previousPosition);
+            randomAccessFile.seek(previousPosition);
         } catch (IOException e) {
             e.printStackTrace();
         } // end try/catch
@@ -69,9 +65,9 @@ public class ChunkProcessor<T> {
 
     public void deleteChunkFromFile()
     {
-        this.close();
+        close();
 
-        File fileToDelete = new File(this.chunkFilePath);
+        File fileToDelete = new File(chunkFilePath);
         boolean isDeleted = fileToDelete.delete();
         
         if (isDeleted) {
@@ -84,9 +80,9 @@ public class ChunkProcessor<T> {
     public void close() 
     {
         try {
-            if(this.randomAccessFile != null) 
+            if(randomAccessFile != null) 
             {
-                this.randomAccessFile.close();
+                randomAccessFile.close();
             } // end if
         } catch (IOException e) {
             e.printStackTrace();

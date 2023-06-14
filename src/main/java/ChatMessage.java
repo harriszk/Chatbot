@@ -13,6 +13,7 @@ public class ChatMessage implements Comparable<ChatMessage> {
     } // end default constructor 
 
     // Data should have the format: [<timestamp>] #<channel_name> <username>: <message>
+    // TODO: Update to check if data is in the correct format using regex.
     public ChatMessage(String data)
     {
         if(data == "")
@@ -28,7 +29,7 @@ public class ChatMessage implements Comparable<ChatMessage> {
         this.channelName = dataArray[2].substring(1);
         this.username = dataArray[3].split(":")[0];
         this.message = dataArray[4];
-    } // end initializing construtor
+    } // end initializing constructor
 
     public ChatMessage(LocalDateTime timestamp, String channelName, String username, String message)
     {
@@ -36,21 +37,21 @@ public class ChatMessage implements Comparable<ChatMessage> {
         this.channelName = channelName;
         this.username = username;
         this.message = message;
-    } // end initializing construtor
+    } // end initializing constructor
 
     public LocalDateTime getTimestamp()
     {
-        return this.timestamp;
+        return timestamp;
     } // end getTimestamp
 
-    public void setTimestamp(LocalDateTime time)
+    public void setTimestamp(LocalDateTime timestamp)
     {
-        this.timestamp = time;
+        this.timestamp = timestamp;
     } // end setTimestamp
 
     public String getChannelName()
     {
-        return this.channelName;
+        return channelName;
     } // end getChannelName
 
     public void setChannelName(String channelName)
@@ -60,7 +61,7 @@ public class ChatMessage implements Comparable<ChatMessage> {
 
     public String getUsername()
     {
-        return this.username;
+        return username;
     } // end getUsername
 
     public void setUsername(String username)
@@ -70,7 +71,7 @@ public class ChatMessage implements Comparable<ChatMessage> {
 
     public String getMessage()
     {
-        return this.message;
+        return message;
     } // end getMessage
 
     public void setMessage(String message)
@@ -85,12 +86,12 @@ public class ChatMessage implements Comparable<ChatMessage> {
             return -1;
         } // end if
 
-        if(this.timestamp == null)
+        if(timestamp == null)
         {
             return 1;
         } // end if
 
-        return this.timestamp.compareTo(message.timestamp);
+        return timestamp.compareTo(message.timestamp);
     } // end compareTo
 
     @Override
@@ -110,13 +111,13 @@ public class ChatMessage implements Comparable<ChatMessage> {
     @Override
     public String toString()
     {
-        if(this.timestamp == null || this.channelName == null || this.username == null|| this.message == null)
+        if(timestamp == null || channelName == null || username == null|| message == null)
         {
             return "";
         } // end if 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedTimestamp = this.timestamp.format(formatter);
-        return String.format("[%s] #%s %s: %s", formattedTimestamp, this.channelName, this.username, this.message);
+        String formattedTimestamp = timestamp.format(formatter);
+        return String.format("[%s] #%s %s: %s", formattedTimestamp, channelName, username, message);
     } // end toString
 } // end ChatMessage

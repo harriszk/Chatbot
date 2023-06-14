@@ -1,4 +1,6 @@
 data/
 images/
 target/
+testLogs/
+finalMergedChunks.txt
 .DS_Store

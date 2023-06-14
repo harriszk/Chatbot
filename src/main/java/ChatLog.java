@@ -3,7 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List; 
 
 public class ChatLog<T extends Comparable<T>> {
     private static String CHUNK_DIRECTORY = "tmp/chunks/";
@@ -32,7 +32,6 @@ public class ChatLog<T extends Comparable<T>> {
 
         List<T> chunk = new ArrayList<>();
         String line, chunkLocation;
-        //int numberOfChunks = 1;
         int elementCount = 0;
         T element;
 
@@ -46,26 +45,19 @@ public class ChatLog<T extends Comparable<T>> {
                         continue;
                     } // end if
 
-                    //System.out.println("Loading '" + line + "'");
-
-                    // Process the line and extract the entry
                     element = converter.convert(line);
                     chunk.add(element);
                     elementCount++;
 
-                    //System.out.println(element.toString());
-
                     if(elementCount == chunkSize) 
                     {
-                        chunk = this.sorter.sort(chunk);
-                        // Write the chunk to a chunk file
+                        chunk = sorter.sort(chunk);
                         chunkLocation = ChatLog.CHUNK_DIRECTORY + "chunk_"  + System.currentTimeMillis() + ".txt";
-                        this.fileHandler.writeChunkToFile(chunkLocation, chunk.toArray());
+                        fileHandler.writeChunkToFile(chunkLocation, chunk.toArray());
 
-                        this.chunkLocations.add(chunkLocation);
+                        chunkLocations.add(chunkLocation);
                         chunk.clear();
                         elementCount = 0;
-                        //numberOfChunks++;
                     } // end if
                 } // end while
             } catch (IOException e) {
@@ -76,10 +68,10 @@ public class ChatLog<T extends Comparable<T>> {
         // Write any remaining entries as the last chunk
         if(!chunk.isEmpty()) 
         {
-            chunk = this.sorter.sort(chunk);
+            chunk = sorter.sort(chunk);
             chunkLocation = ChatLog.CHUNK_DIRECTORY + "chunk_"  + System.currentTimeMillis() + ".txt";
-            this.fileHandler.writeChunkToFile(chunkLocation, chunk.toArray());
-            this.chunkLocations.add(chunkLocation);
+            fileHandler.writeChunkToFile(chunkLocation, chunk.toArray());
+            chunkLocations.add(chunkLocation);
             chunk.clear();
         } // end if
     } // end chunkLogs
@@ -87,15 +79,15 @@ public class ChatLog<T extends Comparable<T>> {
     public void mergeChunks()
     {
         System.out.println("=================== mergeChunks() ===================");
-        System.out.println(this.chunkLocations);
-        System.out.println(this.chunkLocations.size());
+        System.out.println(chunkLocations);
+        System.out.println(chunkLocations.size());
 
-        this.merger.mergeAllChunks(this.chunkLocations);
+        merger.mergeAllChunks(chunkLocations);
     } // end mergeChunks
 
     public List<String> getChunkLocations()
     {
-        return this.chunkLocations;
+        return chunkLocations;
     } // end getChunkLocations
 
     private List<String> getFileNames(String directoryPath) 
