@@ -1,10 +1,6 @@
 public class Driver {
     public static void main(String[] args) {
-        ChatLog<ChatMessage> chatLog = new ChatLog<>(new ChatMessageConverter());
-
-        chatLog.chunkLogs("testLogs", 500);
-
-        chatLog.mergeChunks();
+        
     } // end main
 
     public static Integer[] generate(int select, int minVal, int maxVal) {

@@ -180,15 +180,14 @@ public class KWayMergeTest {
 
         List<ChatMessage> expected = new ArrayList<>();
 
-        for(String messageText : this.sortedMessagesChunks1And2)
-        {
+        for(String messageText : this.sortedMessagesChunks1And2) {
             ChatMessage message = new ChatMessage(messageText);
             expected.add(message);
         } // end for
 
         List<String> chunkLocations = new ArrayList<>(Arrays.asList(TEST_CHUNKS_DIRECTORY + "/chunk1.txt", TEST_CHUNKS_DIRECTORY + "/chunk2.txt"));
 
-        merger.mergeAllChunks(chunkLocations);
+        merger.mergeAllChunks(chunkLocations, "finalMergedChunks.txt");
         List<ChatMessage> mergedChunk = this.fileHandler.loadChunkFromFile("finalMergedChunks.txt", this.chatMessageConverter);
 
         Assert.assertEquals(expected, mergedChunk);
@@ -211,7 +210,7 @@ public class KWayMergeTest {
 
         List<String> chunkLocations = new ArrayList<>(Arrays.asList(TEST_CHUNKS_DIRECTORY + "/chunk1.txt", TEST_CHUNKS_DIRECTORY + "/chunk2.txt"));
 
-        merger.mergeAllChunks(chunkLocations);
+        merger.mergeAllChunks(chunkLocations, "finalMergedChunks.txt");
         List<Integer> mergedChunk = this.fileHandler.loadChunkFromFile("finalMergedChunks.txt", this.integerConverter);
 
         Assert.assertEquals(expected, mergedChunk);
@@ -233,15 +232,14 @@ public class KWayMergeTest {
 
         List<ChatMessage> expected = new ArrayList<>();
 
-        for(String messageText : this.messagesChunk3)
-        {
+        for(String messageText : this.messagesChunk3) {
             ChatMessage message = new ChatMessage(messageText);
             expected.add(message);
         } // end for
 
         List<String> chunkLocations = new ArrayList<>(Arrays.asList(TEST_CHUNKS_DIRECTORY + "/chunk1.txt", TEST_CHUNKS_DIRECTORY + "/chunk2.txt"));
 
-        merger.mergeAllChunks(chunkLocations);
+        merger.mergeAllChunks(chunkLocations, "finalMergedChunks.txt");
         List<ChatMessage> mergedChunk = this.fileHandler.loadChunkFromFile("finalMergedChunks.txt", this.chatMessageConverter);
 
         Assert.assertEquals(expected, mergedChunk);
@@ -265,7 +263,7 @@ public class KWayMergeTest {
 
         List<String> chunkLocations = new ArrayList<>(Arrays.asList(TEST_CHUNKS_DIRECTORY + "/chunk1.txt", TEST_CHUNKS_DIRECTORY + "/chunk2.txt"));
 
-        merger.mergeAllChunks(chunkLocations);
+        merger.mergeAllChunks(chunkLocations, "finalMergedChunks.txt");
         List<Integer> mergedChunk = this.fileHandler.loadChunkFromFile("finalMergedChunks.txt", this.integerConverter);
 
         Assert.assertEquals(expected, mergedChunk);
@@ -285,15 +283,14 @@ public class KWayMergeTest {
 
         List<ChatMessage> expected = new ArrayList<>();
 
-        for(String messageText : this.messagesChunk4)
-        {
+        for(String messageText : this.messagesChunk4) {
             ChatMessage message = new ChatMessage(messageText);
             expected.add(message);
         } // end for
 
         List<String> chunkLocations = new ArrayList<>(Arrays.asList(TEST_CHUNKS_DIRECTORY + "/chunk1.txt"));
 
-        merger.mergeAllChunks(chunkLocations);
+        merger.mergeAllChunks(chunkLocations, "finalMergedChunks.txt");
         List<ChatMessage> mergedChunk = this.fileHandler.loadChunkFromFile("finalMergedChunks.txt", this.chatMessageConverter);
 
         Assert.assertEquals(expected, mergedChunk);
@@ -314,7 +311,7 @@ public class KWayMergeTest {
 
         List<String> chunkLocations = new ArrayList<>(Arrays.asList(TEST_CHUNKS_DIRECTORY + "/chunk1.txt"));
 
-        merger.mergeAllChunks(chunkLocations);
+        merger.mergeAllChunks(chunkLocations, "finalMergedChunks.txt");
         List<Integer> mergedChunk = this.fileHandler.loadChunkFromFile("finalMergedChunks.txt", this.integerConverter);
 
         Assert.assertEquals(expected, mergedChunk);
@@ -334,7 +331,7 @@ public class KWayMergeTest {
 
         List<Integer> expected = this.fileHandler.loadChunkFromFile(TEST_CHUNKS_DIRECTORY + "/CHUNKS_SORTED.txt", this.integerConverter);
 
-        merger.mergeAllChunks(chunkLocations);
+        merger.mergeAllChunks(chunkLocations, "finalMergedChunks.txt");
         List<Integer> mergedChunk = this.fileHandler.loadChunkFromFile("finalMergedChunks.txt", this.integerConverter);
 
         Assert.assertEquals(expected, mergedChunk);

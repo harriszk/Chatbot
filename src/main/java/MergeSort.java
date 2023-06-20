@@ -2,15 +2,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MergeSort {
-    public MergeSort()
-    {
+    public MergeSort() {
 
     } // end default constructor
 
-    public <T extends Comparable<T>> List<T> sort(List<T> listToSort)
-    {
-        if(listToSort.size() <= 1)
-        {
+    public <T extends Comparable<T>> List<T> sort(List<T> listToSort) {
+        if(listToSort.size() <= 1) {
             return listToSort;
         } // end if
 
@@ -25,21 +22,17 @@ public class MergeSort {
         return merge(left, right);
     } // end sort
 
-    public <T extends Comparable<T>> List<T> merge(List<T> left, List<T> right)
-    {
+    public <T extends Comparable<T>> List<T> merge(List<T> left, List<T> right) {
         List<T> result = new ArrayList<>();
         int comparingNumber = 0;
 
-        while(true)
-        {
-            if(left.isEmpty())
-            {
+        while(true) {
+            if(left.isEmpty()) {
                 result.addAll(right);
                 break;
             } // end if
 
-            if(right.isEmpty())
-            {
+            if(right.isEmpty()) {
                 result.addAll(left);
                 break;
             } // end if

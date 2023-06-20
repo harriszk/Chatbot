@@ -13,36 +13,30 @@ public class Chunk<T extends Comparable<T>> {
     private int elementsRemovedCounter = 0;
     private boolean deleteFile = true;
 
-    public Chunk(Queue<T> queue, ChunkProcessor<T> processor, ElementConverter<T> converter)
-    {
+    public Chunk(Queue<T> queue, ChunkProcessor<T> processor, ElementConverter<T> converter) {
         this.queue = queue;
         this.processor = processor;
         this.converter = converter;
     } // end initializing constructor
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return queue.isEmpty();
     } // end isEmpty
 
-    public T getNextElement()
-    {
+    public T getNextElement() {
         return queue.peek();
     } // end getNextElement
 
-    public T removeNextElement()
-    {
+    public T removeNextElement() {
         elementsRemovedCounter++;
         return queue.poll();
     } // end removeNextElement
 
     public void loadNewElementsIfNeeded(int MAX) {
-        if(elementsRemovedCounter >= MAX) 
-        {
+        if(elementsRemovedCounter >= MAX) {
             List<T> newElements = processor.loadNElements(MAX, converter);
 
-            if(newElements != null)
-            {
+            if(newElements != null) {
                 queue.addAll(newElements);
             } // end if
             
@@ -50,15 +44,12 @@ public class Chunk<T extends Comparable<T>> {
         } // end if
     } // end loadNewElementsIfNeeded
 
-    public void setDeleteFlag(boolean flag)
-    {
+    public void setDeleteFlag(boolean flag) {
         deleteFile = flag;
     } // end setDeleteFlag
 
-    public void delete()
-    {
-        if(deleteFile)
-        {
+    public void delete() {
+        if(deleteFile) {
             processor.deleteChunkFromFile();
         } // end if
 

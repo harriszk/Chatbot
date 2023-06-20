@@ -15,8 +15,7 @@ public class ChunkTest {
     private Chunk<Integer> chunk;
 
     @Before
-    public void setup() 
-    {
+    public void setup() {
         this.processor = new ChunkProcessor<>(TEST_CHUNKS_DIRECTORY + "/testLoadingChunksFile.txt");
         this.queue = new PriorityQueue<>(MAX_SIZE);
         this.queue.addAll(this.processor.loadNElements(MAX_SIZE, this.converter));
@@ -25,12 +24,10 @@ public class ChunkTest {
     } // end setUp
 
     @Test
-    public void testIsEmpty() 
-    {
+    public void testIsEmpty() {
         Assert.assertFalse(this.chunk.isEmpty());
         
-        for(int i = 0; i < 16; i++)
-        {
+        for(int i = 0; i < 16; i++) {
             this.chunk.removeNextElement();
         } // end for
         
@@ -38,8 +35,7 @@ public class ChunkTest {
     } // end testIsEmpty
 
     @Test
-    public void testGetNextElement() 
-    {
+    public void testGetNextElement() {
         Integer expected = 1;
         Integer actual = this.chunk.getNextElement();
         Assert.assertEquals(expected, actual);
@@ -51,8 +47,7 @@ public class ChunkTest {
     } // end testGetNextElement
 
     @Test
-    public void testRemoveNextElement() 
-    {
+    public void testRemoveNextElement() {
         Integer expected = 1;
         Integer actual = this.chunk.removeNextElement();
         Assert.assertEquals(expected, actual);
@@ -67,10 +62,8 @@ public class ChunkTest {
     } // end testRemoveNextElement
 
     @Test
-    public void testLoadNewElementsIfNeeded() 
-    {
-        for(int i = 0; i < MAX_SIZE; i++)
-        {
+    public void testLoadNewElementsIfNeeded() {
+        for(int i = 0; i < MAX_SIZE; i++) {
             this.chunk.removeNextElement();
         } // end for
 
@@ -86,8 +79,7 @@ public class ChunkTest {
     } // end testRemoveNextElement
 
     @Test
-    public void testDelete() 
-    {
+    public void testDelete() {
         Integer[] testChunk = {2, 7, 9, 12, 15, 19, 23, 26, 27, 28, 30, 31, 36, 38};
         FileHandler fileHandler = new FileHandler();
         fileHandler.writeChunkToFile(TEST_CHUNKS_DIRECTORY + "/test.txt", testChunk);

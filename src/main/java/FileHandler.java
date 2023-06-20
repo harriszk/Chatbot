@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileHandler {
-    public FileHandler()
-    {
+    public FileHandler() {
 
     } // end default constructor
 
@@ -18,18 +17,15 @@ public class FileHandler {
         T element;
 
         File file = new File(filePathName);
-        if(!file.exists()) 
-        {
+        if(!file.exists()) {
             return null;
         } // end if
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
 
-            while((line = reader.readLine()) != null) 
-            {
-                if(line.equals(""))
-                {
+            while((line = reader.readLine()) != null) {
+                if(line.equals("")) {
                     continue;
                 } // end if
 
@@ -45,19 +41,16 @@ public class FileHandler {
         return chunk;
     } // end loadChunkFromFile
 
-    public <T> void writeChunkToFile(String filePathName, T[] chunk)
-    {
+    public <T> void writeChunkToFile(String filePathName, T[] chunk) {
         File chunkFile = new File(filePathName);
-        if(chunkFile.exists()) 
-        {
+        if(chunkFile.exists()) {
             chunkFile.delete();
         } // end if
 
         try {
             FileWriter writer = new FileWriter(chunkFile);
 
-            for(int i = 0; i < chunk.length; i++) 
-            {
+            for(int i = 0; i < chunk.length; i++) {
                 writer.write(chunk[i].toString() + "\n");
             } // end for
 
@@ -71,8 +64,7 @@ public class FileHandler {
     public void deleteChunkFile(String filePathName) {
         File chunkFile = new File(filePathName);
 
-        if(!chunkFile.exists()) 
-        {
+        if(!chunkFile.exists()) {
             System.out.println("Chunk file does not exist: " + filePathName);
             return;
         } // end if

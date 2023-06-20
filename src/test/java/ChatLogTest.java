@@ -13,8 +13,7 @@ public class ChatLogTest {
     private static int CHUNK_SIZE = 5000;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         this.chatLog = new ChatLog<>(new IntegerConverter());
     } // end setUp
 
@@ -24,8 +23,7 @@ public class ChatLogTest {
         String directoryPath = "tmp/emptyFolder";
 
         File directory = new File(directoryPath);
-        if(directory.exists()) 
-        {
+        if(directory.exists()) {
             directory.delete();
         } // end if
 
@@ -46,8 +44,7 @@ public class ChatLogTest {
         String directoryPath = "tmp/unsortedFiles";
 
         File directory = new File(directoryPath);
-        if(directory.exists()) 
-        {
+        if(directory.exists()) {
             this.deleteDirectory(directory);
         } // end if
 
@@ -82,8 +79,7 @@ public class ChatLogTest {
         String directoryPath = "tmp/unsortedFiles";
 
         File directory = new File(directoryPath);
-        if(directory.exists()) 
-        {
+        if(directory.exists()) {
             this.deleteDirectory(directory);
         } // end if
 
@@ -103,8 +99,7 @@ public class ChatLogTest {
 
         String testFilePath;
 
-        for(int i = 0; i < unsortedArrays.size(); i++)
-        {
+        for(int i = 0; i < unsortedArrays.size(); i++) {
             testFilePath = directoryPath + "/testUnsorted" + (i + 1) + ".txt";
             this.fileHandler.writeChunkToFile(testFilePath, unsortedArrays.get(i));
         } // end for
@@ -128,8 +123,7 @@ public class ChatLogTest {
         String directoryPath = "tmp/unsortedFiles";
 
         File directory = new File(directoryPath);
-        if(directory.exists()) 
-        {
+        if(directory.exists()) {
             this.deleteDirectory(directory);
         } // end if
 
@@ -151,8 +145,7 @@ public class ChatLogTest {
 
         String testFilePath;
 
-        for(int i = 0; i < unsortedArrays.size(); i++)
-        {
+        for(int i = 0; i < unsortedArrays.size(); i++) {
             testFilePath = directoryPath + "/testUnsorted" + (i + 1) + ".txt";
             this.fileHandler.writeChunkToFile(testFilePath, unsortedArrays.get(i));
         } // end for
@@ -176,8 +169,7 @@ public class ChatLogTest {
         String directoryPath = "tmp/unsortedFiles";
 
         File directory = new File(directoryPath);
-        if(directory.exists()) 
-        {
+        if(directory.exists()) {
             this.deleteDirectory(directory);
         } // end if
 
@@ -199,8 +191,7 @@ public class ChatLogTest {
 
         String testFilePath;
 
-        for(int i = 0; i < unsortedArrays.size(); i++)
-        {
+        for(int i = 0; i < unsortedArrays.size(); i++) {
             testFilePath = directoryPath + "/testUnsorted" + (i + 1) + ".txt";
             this.fileHandler.writeChunkToFile(testFilePath, unsortedArrays.get(i));
         } // end for
@@ -223,8 +214,7 @@ public class ChatLogTest {
         String directoryPath = "tmp/unsortedFiles";
 
         File directory = new File(directoryPath);
-        if(directory.exists()) 
-        {
+        if(directory.exists()) {
             this.deleteDirectory(directory);
         } // end if
 
@@ -246,15 +236,14 @@ public class ChatLogTest {
 
         String testFilePath;
 
-        for(int i = 0; i < unsortedArrays.size(); i++)
-        {
+        for(int i = 0; i < unsortedArrays.size(); i++) {
             testFilePath = directoryPath + "/testUnsorted" + (i + 1) + ".txt";
             this.fileHandler.writeChunkToFile(testFilePath, unsortedArrays.get(i));
         } // end for
 
         this.chatLog.chunkLogs(directoryPath, ChatLogTest.CHUNK_SIZE);
 
-        this.chatLog.mergeChunks();
+        this.chatLog.mergeChunks("finalMergedChunks.txt");
 
         this.deleteDirectory(directory);
 
@@ -299,20 +288,17 @@ public class ChatLogTest {
         Integer[] array = new Integer[size];
         Random random = new Random();
 
-        for (int i = 0; i < size; i++) 
-        {
+        for (int i = 0; i < size; i++) {
             array[i] = random.nextInt(maxValue - minValue + 1) + minValue;
         } // end for
 
         return array;
     } // end generateRandomArray
 
-    private <T> int calculateExpectedChunkCount(List<T[]> unsortedArrays) 
-    {
+    private <T> int calculateExpectedChunkCount(List<T[]> unsortedArrays) {
         double totalCount = 0;
 
-        for(T[] array : unsortedArrays) 
-        {
+        for(T[] array : unsortedArrays) {
             int arraySize = array.length;
             double chunkCount = (double) arraySize / CHUNK_SIZE;
             totalCount += chunkCount;
@@ -321,31 +307,25 @@ public class ChatLogTest {
         return (int) Math.ceil(totalCount);
     } // end calculateExpectedChunkCount
 
-    private void deleteFile(String filePath) 
-    {
+    private void deleteFile(String filePath) {
         File file = new File(filePath);
-        if(file.exists()) 
-        {
+        if(file.exists()) {
             file.delete();
         } // end if
     } // end deleteFile
 
     private void deleteDirectory(File directory) {
         File[] files = directory.listFiles();
-        if(files != null) 
-        {
-            for(File file : files) 
-            {
+        if(files != null) {
+            for(File file : files) {
                 this.deleteFile(file.getAbsolutePath());
             } // end for
         } // end if
         directory.delete();
     } // end deleteDirectory
 
-    private void deleteChunks(List<String> chunkLocations)
-    {
-        for(String chunkLocation : chunkLocations) 
-        {
+    private void deleteChunks(List<String> chunkLocations) {
+        for(String chunkLocation : chunkLocations) {
             this.deleteFile(chunkLocation);
         } // end for
     } // end deleteChunks

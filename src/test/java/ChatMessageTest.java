@@ -10,8 +10,7 @@ public class ChatMessageTest {
     private String messageText = "[2023-04-19 22:06:22] #channel1 user1: This is a test message";
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         String[] messageArray = messageText.split(" ", 5);
         String dateString = (messageArray[0] + " " + messageArray[1]).substring(1).split("]")[0];
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -25,8 +24,7 @@ public class ChatMessageTest {
     } // end setUp
 
     @Test()
-    public void testGetTimestamp()
-    {
+    public void testGetTimestamp() {
         String dateString = "2023-04-19 22:06:22";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime expected = LocalDateTime.parse(dateString, formatter);
@@ -35,8 +33,7 @@ public class ChatMessageTest {
     } // end getTimestamp
 
     @Test 
-    public void testSetTimestamp()
-    {
+    public void testSetTimestamp() {
         String newDateString = "2022-09-04 13:25:00";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime expected = LocalDateTime.parse(newDateString, formatter);
@@ -46,16 +43,14 @@ public class ChatMessageTest {
     } // end setTimestamp
 
     @Test
-    public void testGetChannelName()
-    {
+    public void testGetChannelName() {
         String expected =  "channel1";
         String actual = this.message.getChannelName();
         Assert.assertEquals(expected, actual);
     } // end getChannelName
 
     @Test 
-    public void testSetChannelName()
-    {
+    public void testSetChannelName() {
         String expected = "channel2";
         this.message.setChannelName(expected);
         String actual = this.message.getChannelName();
@@ -63,16 +58,14 @@ public class ChatMessageTest {
     } // end setChannelName
 
     @Test
-    public void testGetUsername()
-    {
+    public void testGetUsername() {
         String expected =  "user1";
         String actual = this.message.getUsername();
         Assert.assertEquals(expected, actual);
     } // end getUsername
 
     @Test 
-    public void testSetUsername()
-    {
+    public void testSetUsername() {
         String expected = "user2";
         this.message.setUsername(expected);
         String actual = this.message.getUsername();
@@ -80,16 +73,14 @@ public class ChatMessageTest {
     } // end setUsername
 
     @Test
-    public void testGetMessage()
-    {
+    public void testGetMessage() {
         String expected =  "This is a test message";
         String actual = this.message.getMessage();
         Assert.assertEquals(expected, actual);
     } // end getMessage
 
     @Test 
-    public void testSetMessage()
-    {
+    public void testSetMessage() {
         String expected = "This is a changed test message";
         this.message.setMessage(expected);
         String actual = this.message.getMessage();

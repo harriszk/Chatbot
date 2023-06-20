@@ -22,16 +22,14 @@ public class MergeSortTest {
     private String rightMessage5Text = "[2023-04-19 23:15:05] #channel1 user2: This is the tenth test message.";
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         this.sorter = new MergeSort();
     } // end setUp
 
     // Test that the merge method works as expected. It should be private
     // in the final implementation however.
     @Test
-    public void testMergeIntegers()
-    {
+    public void testMergeIntegers() {
         Integer[] leftArray = {1, 2, 4, 5, 7, 9};
         Integer[] rightArray = {1, 2, 3, 5, 6, 8};
         Integer[] expectedArray = {1, 1, 2, 2, 3, 4, 5, 5, 6, 7, 8, 9};
@@ -45,8 +43,7 @@ public class MergeSortTest {
     } // end testMergeIntegers
 
     @Test
-    public void testMergeChatMessages()
-    {
+    public void testMergeChatMessages() {
         ChatMessage leftMessage1 = new ChatMessage(leftMessage1Text);
         ChatMessage leftMessage2 = new ChatMessage(leftMessage2Text);
         ChatMessage leftMessage3 = new ChatMessage(leftMessage3Text);
@@ -90,8 +87,7 @@ public class MergeSortTest {
     } // end testMergeChatMessages
 
     @Test
-    public void testMergeSortIntegers()
-    {
+    public void testMergeSortIntegers() {
         Integer[] unorderedArray = {5, 8, 2, 1, 9, 4};
         List<Integer> elementsToSort = new ArrayList<>(Arrays.asList(unorderedArray));
 
@@ -103,8 +99,7 @@ public class MergeSortTest {
     } // end testMergeSortIntegers
 
     @Test
-    public void testMergeSortChatMessages()
-    {
+    public void testMergeSortChatMessages() {
         ChatMessage message1 = new ChatMessage(leftMessage1Text);
         ChatMessage message2 = new ChatMessage(leftMessage2Text);
         ChatMessage message3 = new ChatMessage(leftMessage3Text);

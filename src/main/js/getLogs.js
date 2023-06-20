@@ -2,7 +2,7 @@ const https = require('https');
 const fs = require('fs')
 const { readFile } = require('fs/promises')
 const readline = require('readline');
-require('dotenv').config({ path: '../secret.env' });
+require('dotenv').config({ path: '../../../../secret.env' });
 
 //const DRIVE_PATH = '/Volumes/SEAGATE EXP/';
 const DRIVE_PATH = '../../../data/';
@@ -46,7 +46,7 @@ function getUserID(username, callback) {
 	};
 
 	makeGetRequest(options, true, function(userData){
-		console.log(userData);
+		//console.log(userData);
 
 		if(userData.data[0] == undefined) {
 			console.log(`${username} doesn't exist on Twitch`);
@@ -73,7 +73,7 @@ function getList(userid, channel, callback) {
 	});
 } // end getList
 
-function getUsersLogs(channel, username) {
+function getUsersLogs(channel, username, callback) {
 	// Gets user logs in channel of given year and month
 	// -> /channel/{channel}/user/{username}/{year}/{month}
 
@@ -97,7 +97,7 @@ function getUsersLogs(channel, username) {
 				let month = list.availableLogs[entry]['month'];
 				let path = `/channel/${channel}/user/${username}/${year}/${month}`;
 
-				console.log(`${process.env.HOST}${path}`);
+				//console.log(`${process.env.HOST}${path}`);
 
 				let options = {
 					host: process.env.HOST,
@@ -117,11 +117,12 @@ function getUsersLogs(channel, username) {
 			console.log(`Creating the file ${DRIVE_PATH}userLogs/${username}.txt`);
 		});
 	});
+	return;
 } // end getUserLogs
 
 function start() {
 	const file = readline.createInterface({
-        input: fs.createReadStream('../../../data/offlineChatters.txt'),
+        input: fs.createReadStream('../../../data/test.txt'),
         output: process.stdout,
         terminal: false
     });
@@ -131,44 +132,10 @@ function start() {
     });
 } // end start
 
+//start();
 
-//getUsersLogs("lacari", "mizkif");
-/*
-getList(14966718, "mizkif", function(list){
-	console.log(list);
-});
-*/
+//getUsersLogs("mizkif", "yopickle");
+getUsersLogs("mizkif", "titterman");
 
-/* 
-const MAX_CREATE = 10;
 
-let chatters = [];
-
-function sleep(seconds) {
-    return new Promise((resolve) => {
-    	setTimeout(resolve, seconds*1000);
-    });
-} // end sleep
-
-function getChattersLogs(callback)
-{ 
-    for(let i = 0; i < MAX_CREATE; i++){
-        if(chatters[i] !== undefined){
-            getUsersLogs('mizkif', chatters[i]);
-        } 
-    }
-    callback();
-} // end getChattersLogs
-
-function laodChatters(){
-    const file = readline.createInterface({
-        input: fs.createReadStream('userLogs/offline_chatters.txt'),
-        output: process.stdout,
-        terminal: false
-    });
-
-    file.on('line', (username) => {
-		chatters.push(username);
-    });
-} // end laodChatters
-*/
+businessLogic();

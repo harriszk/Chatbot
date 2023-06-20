@@ -15,15 +15,13 @@ public class ChunkProcessorTest {
     private Integer[] testChunk = {2, 7, 9, 12, 15, 19, 23, 26, 27, 28, 30, 31, 36, 38};
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         this.fileHandler.writeChunkToFile(TEST_CHUNK_LOCATION, testChunk);
         this.processor = new ChunkProcessor<>(TEST_CHUNK_LOCATION);
     } // end setUp
 
     @Test
-    public void testLoadNElements()
-    {
+    public void testLoadNElements() {
         List<Integer> expected = new ArrayList<>(Arrays.asList(2, 7, 9, 12, 15, 19));
 
         List<Integer> actual = this.processor.loadNElements(6, this.converter);
@@ -35,8 +33,7 @@ public class ChunkProcessorTest {
     } // end testLoadNElements
 
     @Test
-    public void testLoadNextNElements()
-    {
+    public void testLoadNextNElements() {
         this.processor.loadNElements(6, this.converter);
 
         List<Integer> expected = new ArrayList<>(Arrays.asList(23, 26, 27));

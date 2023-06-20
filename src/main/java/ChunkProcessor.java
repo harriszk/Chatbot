@@ -11,8 +11,7 @@ public class ChunkProcessor<T> {
     private RandomAccessFile randomAccessFile;
     private long previousPosition;
 
-    public ChunkProcessor(String chunkFilePath)
-    {
+    public ChunkProcessor(String chunkFilePath) {
         this.chunkFilePath = chunkFilePath;
         try {
             randomAccessFile = new RandomAccessFile(chunkFilePath, "r");
@@ -29,19 +28,18 @@ public class ChunkProcessor<T> {
             T element;
             int count = 0;
             
-            while(true) 
-            {
+            while(true) {
                 previousPosition = randomAccessFile.getFilePointer();
 
                 line = randomAccessFile.readLine();
-                if(line == null || line == System.lineSeparator())
-                {
+                
+                if(line == null || line.equals(System.lineSeparator())) {
                     break;
                 } // end if
+                
                 line = new String(line.getBytes("ISO-8859-1"), "UTF-8");
 
-                if(count == N)
-                {
+                if(count == N) {
                     break;
                 } // end if
                 
@@ -55,33 +53,29 @@ public class ChunkProcessor<T> {
             e.printStackTrace();
         } // end try/catch
 
-        if(elements.size() == 0)
-        {
+        if(elements.size() == 0) {
             return null;
         } // end if
 
         return elements;
     } // end loadNElements
 
-    public void deleteChunkFromFile()
-    {
+    public void deleteChunkFromFile() {
         close();
 
         File fileToDelete = new File(chunkFilePath);
         boolean isDeleted = fileToDelete.delete();
         
-        if (isDeleted) {
+        if(isDeleted) {
             System.out.println("File deleted successfully. " + fileToDelete.getAbsolutePath());
         } else {
             System.out.println("Failed to delete the file." + fileToDelete.getAbsolutePath());
         }
     } // end deleteChunk
 
-    public void close() 
-    {
+    public void close() {
         try {
-            if(randomAccessFile != null) 
-            {
+            if(randomAccessFile != null) {
                 randomAccessFile.close();
             } // end if
         } catch (IOException e) {
@@ -91,13 +85,11 @@ public class ChunkProcessor<T> {
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) 
-        {
+        if(this == obj) {
             return true;
         } // end if 
 
-        if(obj == null || getClass() != obj.getClass()) 
-        {
+        if(obj == null || getClass() != obj.getClass()) {
             return false;
         } // end if
 
